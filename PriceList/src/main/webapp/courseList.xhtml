@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"  >
+    <h:head>
+        <title>Ciena Product Training Price List</title>
+
+        <link rel="stylesheet" href="style.css" type="text/css"
+              media="screen, projection" />
+    </h:head>
+
+    <h:body>
+        <div id="wrapper">
+
+            <div id="header">
+                <img src="gfx/Learning_Solutions_II.jpg" align ="left" alt="Ciena Learning Solutions"/>
+                <img src="gfx/spectrum.png" />
+                <p>Product Training Price List</p>
+            </div>
+
+            <div id="content">
+                <h:form id="courseListForm">    
+
+                    <h3>Custom List</h3>
+                    <p:dataTable id="shoppingCart" value="#{courseList.shoppingCartList}" var="list"
+                                 selectionMode="single" rowKey="#{list.primaryKey}"
+                                 emptyMessage="Add courses from below to your custom list"
+                                 selection="#{courseList.selectedShoppingcartCourse}">
+
+                        <p:column id="numberColumn" 
+                                  headerText="Course No">   
+                            <f:facet name="header">Part Number</f:facet>
+                            <h:outputText value="#{list.number}" />
+                        </p:column>
+
+                        <p:column id="listProductNumberColumn" style="display:none;" 
+
+                                  headerText="Products"
+                                  filterMatchMode="contains"
+                                  >
+                            <f:facet name="header">Products</f:facet>
+
+                            <h:outputText escape="false" value="#{list.product}" />
+
+                        </p:column>                       
+
+                        <p:column>
+                            <f:facet name="header">Description</f:facet>
+                            <h:outputText value="#{list.name}" />
+                        </p:column>    
+
+                        <p:column id="locationColumn" 
+                                  headerText="Location" 
+                                  style="display:none;" >
+                            <f:facet name="header">Location</f:facet>
+                            <h:outputText value="#{list.location}" />
+                        </p:column>                      
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Unit</f:facet>
+                            <h:outputText value="#{list.unit}" />
+                        </p:column> 
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Duration</f:facet>
+                            <h:outputText value="#{list.duration}" />
+                        </p:column> 
+
+                        <p:column style="display:none;" >
+                            <f:facet name="header">Type</f:facet>
+                            <h:outputText value="#{list.type}" />
+                        </p:column>
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Role</f:facet>
+                            <h:outputText value="#{list.role}" />
+                        </p:column> 
+
+                        <p:column style="display:none;" >
+                            <f:facet name="header">Category</f:facet>
+                            <h:outputText value="#{list.category}" />
+                        </p:column>                        
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Max Students</f:facet>
+                            <h:outputText value="#{list.maxNumStudents}"/>
+                        </p:column> 
+
+                        <p:column>
+                            <f:facet name="header">Price</f:facet>
+                            <h:outputText value="#{list.price}">
+                                <f:convertNumber type="currency" 
+                                                 currencyCode="USD" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Product Category</f:facet>
+                            <h:outputText value="#{list.superProduct}" />
+                        </p:column> 
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Sub-product</f:facet>
+                            <h:outputText value="#{list.subProduct}" />
+                        </p:column> 
+
+                        <f:facet name="footer">  
+                            <p:commandButton id="remove" value="Remove" 
+                                             update="shoppingCart" actionListener="#{courseList.removeFromCart()}" />  
+                            <p>Export List: 
+                                <h:commandLink>  
+                                    <p:graphicImage value="gfx/csv.png" />  
+                                    <p:dataExporter type="csv" target="shoppingCart" 
+                                                    fileName="Custom_#{dateBean.getFileName()}" />  
+                                </h:commandLink>
+                            </p>
+                        </f:facet> 
+
+                    </p:dataTable>
+
+
+                    <h:outputText  
+                        value ="#{courseList.response}" />  
+
+                    <p>Select a course in the table below for more information.</p>
+
+                    <h3>Search Results</h3>
+                    <p:dataTable id="dataTable" value="#{courseList.courses}" var="course" widgetVar="courseTable"
+                                 paginator="true" rows="20" rowsPerPageTemplate="10,20,50"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginatorAlwaysVisible="false" selection="#{courseList.selectedCourse}" 
+                                 selectionMode="single" rowKey="#{course.primaryKey}"
+                                 emptyMessage="No courses found with given criteria" filteredValue="#{courseList.filteredCourses}">
+
+                        <p:ajax event="rowSelect" update=":courseListForm:display" 
+                                oncomplete="courseDialog.show()" />
+
+
+                        <p:column id="numberColumn" filterBy="#{course.number}"
+                                  headerText="Course No" 
+                                  filterMatchMode="contains">   
+                            <f:facet name="header">Part Number</f:facet>
+                            <h:outputText value="#{course.number}" />
+                        </p:column>
+
+                        <p:column id="productNumberColumn" filterBy="#{course.product}" 
+
+                                  headerText="Products"
+                                  filterMatchMode="contains"
+                                  >
+                            <f:facet name="header">Products</f:facet>
+
+                            <h:outputText escape="false" value="#{course.product}" />
+
+                        </p:column>                       
+
+                        <p:column id="nameColumn" filterBy="#{course.name}" filterMatchMode="contains" style="white-space:normal !important;"
+                                  >
+                            <f:facet name="header">Description</f:facet>
+                            <h:outputText value="#{course.name}" />
+                        </p:column>    
+
+                        <p:column id="locationColumn"  filterBy="#{course.location}"
+                                  headerText="Location" 
+                                  >
+                            
+                            <f:facet name="header">Location</f:facet>
+                            <h:outputText value="#{course.location}" />
+                        </p:column>                      
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Unit</f:facet>
+                            <h:outputText value="#{course.unit}" />
+                        </p:column> 
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Duration</f:facet>
+                            <h:outputText value="#{course.duration}" />
+                        </p:column> 
+
+                        <p:column filterBy="#{course.type}">
+                            <f:facet name="header">Type</f:facet>
+                            <h:outputText value="#{course.type}" />
+                        </p:column>
+
+                        <p:column filterBy="#{course.role}" style="display:none;">
+                            <f:facet name="header">Role</f:facet>
+                            <h:outputText value="#{course.role}" />
+                        </p:column> 
+
+                        <p:column filterBy="#{course.category}" style="display:none;">
+                            <f:facet name="header">Category</f:facet>
+                            <h:outputText value="#{course.category}" />
+                        </p:column>            
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Max Students</f:facet>
+                            <h:outputText value="#{course.maxNumStudents}"
+                                          />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Price</f:facet>
+                            <h:outputText value="#{course.price}">
+                                <f:convertNumber type="currency" 
+                                                 currencyCode="USD" 
+                                                 currencySymbol="$"
+                                                 />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Product Category</f:facet>
+                            <h:outputText value="#{course.superProduct}" />
+                        </p:column> 
+
+                        <p:column style="display:none;">
+                            <f:facet name="header">Sub-product</f:facet>
+                            <h:outputText value="#{course.subProduct}" />
+                        </p:column> 
+
+                        <f:facet name="footer">
+                            <p:outputPanel>
+                                <h:outputText value ="Search all fields:" style="color:#f56522;" />
+                                <p:inputText id="globalFilter" onkeyup="courseTable.filter();" style="width:150px" />
+                            </p:outputPanel>
+                        </f:facet>
+                    </p:dataTable>                    
+
+                    <p:dialog id="dialog" header="Course Detail" widgetVar="courseDialog" resizable="true"  
+                              width="500" showEffect="clip" hideEffect="fold">  
+
+                        <h:panelGrid id="display" columns="2" cellpadding="4">  
+
+                            <f:facet name="header">                              
+
+                                <h:outputText value="#{courseList.selectedCourse.getSuperProduct()}" />
+                                <br />
+                                <h:outputText value="#{courseList.selectedCourse.number}" />
+                            </f:facet>
+                            
+                            <h:outputText value="Category " />  
+                            <h:outputText value="#{courseList.selectedCourse.category}" /> 
+
+                            <h:outputText value="Products: " />  
+                            <h:outputText value="#{courseList.selectedCourse.product} #{courseList.selectedCourse.getSubProduct()}" /> 
+
+
+                            <h:outputText value="Description: " />  
+                            <h:outputText value="#{courseList.selectedCourse.name}" /> 
+
+                            <h:outputText value="Unit: " />  
+                            <h:outputText value="#{courseList.selectedCourse.unit}" /> 
+
+                            <h:outputText value="Role: " />  
+                            <h:outputText value="#{courseList.selectedCourse.role}" />
+
+                            <h:outputText value="Duration: " />  
+                            <h:outputText value="#{courseList.selectedCourse.duration}" />
+
+                            <h:outputText value="Max Students: " />  
+                            <h:outputText value="#{courseList.selectedCourse.maxNumStudents}" />
+
+                            <h:outputText value="Price: " />  
+                            <h:outputText value="#{courseList.selectedCourse.price}">
+                                <f:convertNumber type="currency" currencyCode="USD" currencySymbol="$"/>
+                            </h:outputText>
+
+                            <p></p>
+                            <p:commandButton value="Add to List" actionListener="#{courseList.addToCart()}"   
+                                             update="shoppingCart"  /> 
+
+                        </h:panelGrid>  
+                    </p:dialog>  
+                    <p>
+                        <h:commandButton id="goIndex" value="Search Again" class="button"                                               
+                                         action = "#{courseList.goIndex}" /> 
+                    </p>
+
+                    <p>Export all Data: 
+                        <h:commandLink>  
+                            <p:graphicImage value="gfx/csv.png" />  
+                            <p:dataExporter type="csv" target="dataTable" 
+                                            fileName="#{dateBean.getFileName()}" />  
+                        </h:commandLink>
+                    </p>
+
+                    <h:outputText  
+                        value ="#{courseList.response}" />  
+                </h:form>
+            </div>
+
+        </div>
+
+    </h:body>
+
+</html>
+

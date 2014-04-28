@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"  > 
+
+    <h:head> 
+        <title>Ciena Individual Training Registration Form</title>
+ 
+        <link rel="stylesheet" href="style.css" type="text/css"
+              media="screen, projection" />
+    </h:head> 
+
+    <h:body>
+        <div id="wrapper">
+
+            <div id="header">
+                <img src="gfx/Learning_Solutions_II.jpg" align ="left" alt="Ciena Learning Solutions"/>
+                <img src="gfx/spectrum.png" />
+                <p>Ciena Individual Training Registration Form</p>
+            </div>
+
+            <div id="registrationForm">
+
+                <h:form id="courseRegistrationForm" >
+
+                    <p:growl id="msg" />
+
+
+                    <p:messages id="messages" />
+
+                    <p:wizard flowListener="#{courseRegistration.onFlowProcess}">  
+
+                        <p:tab id="personal" title="Personal">
+
+                            <p:panel header="Personal Details">
+
+                                <p:messages id="messages1" />
+
+                                <h:panelGrid columns="1" >
+                                    <h:outputText value="Date: #{courseRegistration.currentDate}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy" type="date" />
+                                    </h:outputText>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="4">
+
+                                    <h:outputLabel for="firstname" value="First: "/>
+                                    <p:inputText id="firstname" value="#{courseRegistration.customer.firstName}"
+                                                 required="true" label="First name" validatorMessage="Enter First Name.">
+                                        <f:validateLength minimum="2"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel for="lastname" value="Last: "/>
+                                    <p:inputText id="lastname" value="#{courseRegistration.customer.lastName}"
+                                                 required="true" label="Last name" validatorMessage="Enter Last Name.">
+                                        <f:validateLength minimum="2"/>
+                                    </p:inputText>
+
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel for="email" value="Your Email: "/>
+                                    <p:inputText id="email" required="true" label="Email Address" size="40"
+                                                 requiredMessage="Please enter your company's email address."
+                                                 validatorMessage="Invalid email format."
+                                                 value="#{courseRegistration.customer.email}">
+
+                                        <f:validateRegex
+                                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+                                    </p:inputText>
+                                    <p:watermark for="email" value="Business Email" />
+                                    <p:message for="email" />
+
+                                    <h:outputLabel for="companyName" value="Company: "/>
+                                    <p:inputText id="companyName" value="#{courseRegistration.customer.companyName}"
+                                                 required="true" label="Company Name" validatorMessage="Enter Company Name">
+                                        <f:validateLength minimum="2"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel for="companyAddress" value="Company Address: "/>
+                                    <p:inputText id="companyAddress" value="#{courseRegistration.customer.companyAddress}"
+                                                 required="false" label="Company Address">
+                                        <f:validateLength minimum="2"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel for="companyAddress2" value="Company Address 2: "/>
+                                    <p:inputText id="companyAddress2" value="#{courseRegistration.customer.companyAddress2}"
+                                                 required="false" label="CompanyAddress2">                            
+                                    </p:inputText>
+
+                                    <h:outputLabel for="country" value="Country: "/>
+                                    <p:inputText id="country" value="#{courseRegistration.customer.country}"
+                                                 required="false" label="Country">
+                                        <f:validateLength minimum="2"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel for="phone" value="Student Phone Number: "/>
+                                    <p:inputText id="phone" value="#{courseRegistration.customer.phone}"
+                                                 required="false" label="Phone Number" validatorMessage="Enter Vaild Phone Number.">                                 
+                                        <f:validateLength minimum="4"/>                      
+                                    </p:inputText>
+
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:tab>
+
+
+                        <p:tab id="studentInfo" title="Student Information">
+                            <p:panel header="Student Information">
+                                <p:messages id="messages2" />
+
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="I am a Ciena: " />  
+                                    <p:selectOneButton value="#{courseRegistration.customer.cienaRelation}">  
+                                        <f:selectItem itemLabel="Employee" itemValue="Employee" />  
+                                        <f:selectItem itemLabel="Reseller Partner" itemValue="Reseller Partner" />  
+                                        <f:selectItem itemLabel="Customer" itemValue="Customer" />  
+                                        <f:selectItem itemLabel="Service Partner" itemValue="Service Partner" /> 
+                                    </p:selectOneButton>  
+
+                                    <h:outputText value="Course Type: " />  
+                                    <p:selectOneButton value="#{courseRegistration.courseRegistration.courseType}">  
+                                        <f:selectItem itemLabel="Web-based" itemValue="Web-based" />  
+                                        <f:selectItem itemLabel="Virtual Instructor-led (virtual classroom)" itemValue="Virtual Instructor-led" />  
+                                        <f:selectItem itemLabel="Instructor-led (classroom)" itemValue="Instructor-led" />  
+                                        <f:selectItem itemLabel="Blended Learning Kit" itemValue="Blended Learning Kit" /> 
+                                    </p:selectOneButton>  
+
+                                    <h:outputLabel for="courseName" value="Course/Kit Number and Name: "/>
+                                    <p:inputText id="courseName" value="#{courseRegistration.courseRegistration.courseName}"
+                                                 required="true" label="Course Name" validatorMessage="Course Name Required.">
+                                        <f:validateLength minimum="4"/>
+                                    </p:inputText>
+
+                                    <h:outputText value="Instructor-led Course Date: " />  
+                                    <p:calendar value="#{courseRegistration.courseRegistration.courseDate}" id="courseCalendar" />
+                                    <h:outputText value="#{courseRegistration.courseRegistration.courseDate}" id="courseDate" >  
+                                        <f:convertDateTime pattern="M/d/yyyy"/>  
+                                    </h:outputText>
+
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:tab>
+
+                        <p:tab id="paymentInfo" title="Payment Information">
+
+                            <p:panel header="Payment Information">
+                                <p:messages id="messages3" />
+
+                                <h2>Payment Method (Fill in Details Below – Must Be Completed)</h2>
+
+                                <p:panelGrid columns="6">
+                                    <h:outputLabel for="poNumber" value="Purchase Order Number: "/>
+                                    <p:inputText id="poNumber" value="#{courseRegistration.courseRegistration.poNumber}"
+                                                 required="false" label="PO Number">
+
+                                    </p:inputText>
+
+                                    <h:outputText value="Training Credits: " />  
+                                    <p:selectBooleanButton value="#{courseRegistration.courseRegistration.trainingCredits}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close">  
+                                        <p:ajax update="msg" listener="#{courseRegistration.trainingCreditsMessage}"/>  
+                                    </p:selectBooleanButton>  
+
+
+                                    <h:outputLabel for="nonRevNumber" value="Non-Rev Number: "/>
+                                    <p:inputText id="nonRevNumber" value="#{courseRegistration.courseRegistration.nonRevNumber}"
+                                                 required="false" label="Non-Rev Number">
+
+                                    </p:inputText>
+
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:tab>
+
+                        <p:tab id="processing" title="Processing Information">
+
+                            <p:panel header="Processing">
+                                <p:messages id="messages4" />
+
+                                <p>Please complete and sign this registration form and submit to the Ciena Training Coordinator at techtng@ciena.com. All registrations are considered pending until proof of payment is received and the Training coordinator has sent a confirmation to the student.
+                                    <strong>Important:</strong> Student registration requests must be tied to a Purchase Order (PO) or a PO number. POs should be submitted separately via fax at 410-694-3199 or via e-mail at podistribution@ciena.com and must reference student name(s), course title, and date (if applicable).  Multiple student course fees may be submitted on a single PO; however, a separate registration form must be submitted for each student.
+                                    Enrollments will be confirmed via e-mail after a purchase order is received. <strong>For Instructor-led Training and Virtual Instructor-led Training</strong>, enrollment confirmation, directions, and information on local accommodations will be sent at time of registration. <strong>For Web-based training</strong>, enrollment confirmation and instructions will be sent to each individual as soon as the payment and request form are processed.</p>
+                                <p:separator />
+                                <h2>Cancellation Policy for Instructor-led and Virtual Instructor-led Training</h2>
+                                <ul>
+                                    <li>Cancellations must be received in writing (email accepted) by Ciena 10 business days or more prior to the course start date in order to avoid a penalty for aggregate costs incurred by Ciena.</li>
+
+                                    <ul>
+                                        <li>Cancellations received by Ciena within 6 to 9 business days of the course start date are subject to a cancellation fee equal to 50% of the price of the relevant training program.</li>
+                                        <li>Cancellations received by Ciena within 5 business days of the course start date are subject to a cancellation fee equal to 100% of the price of the relevant training program.</li>
+                                        <li>"No-shows" will be charged 100% of the paid per-seat price for any person not attending.</li>
+                                    </ul>
+
+                                    <li>Substitutions are permitted up to the start of the course if the purchase order is re-applied to the new student.</li>
+                                    <li>Ciena reserves the right to reschedule courses with less than 6 students enrolled by the published registration deadline. </li>
+                                </ul>
+                                <h2>Cancellation Policy for Web-based Training</h2>
+                                <ul>
+                                    <li>Registrations are considered active once student is notified that Ciena has provided courseware access with instructions.</li>
+                                    <li>Students will have access to the courseware for a period of 60 days from active registration unless otherwise specified in the governing customer contract.</li>
+                                </ul>
+
+                                <p:panelGrid columns="2">
+
+                                    <h:outputText value="I have read and agree to the terms and 
+                                                  conditions of Ciena Corporation’s cancellation 
+                                                  and “no show” policy.  Please note that by 
+                                                  submitting this form, you are electronically 
+                                                  signing as acceptance to  the terms which 
+                                                  are  outlined in the Training Registration 
+                                                  Form.  This section must be completed before 
+                                                  your registration can be processed. " style="color:#c71c2c;" />  
+
+                                    <p:commandButton value="Submit" widgetVar="submitButton"
+                                                     action="thanks.xhtml?faces-redirect=true"
+                                                     actionListener="#{courseRegistration.submit}"                                     
+                                                     ajax="false"/>
+
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:tab>
+                    </p:wizard>
+                </h:form>
+            </div>
+        </div>
+
+    </h:body>
+
+</html>
