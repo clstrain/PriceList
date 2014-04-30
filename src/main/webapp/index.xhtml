@@ -9,7 +9,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"> 
 
     <h:head> 
-        <title>jboss Dedicated Training Registration Form</title>
+        <title>Ciena Dedicated Training Registration Form</title>
 
         <link rel="stylesheet" href="style.css" type="text/css"
               media="screen, projection" />
@@ -51,14 +51,16 @@
                                     <p:row>
                                         <p:column>
                                             <h:outputLabel for="firstName" value="First Name: " />
-                                            <p:inputText id="firstName" value="#{viewRegistration.requestor.firstName}" required="true">
+                                            <p:inputText id="firstName" value="#{viewRegistration.requestor.firstName}" required="true" requiredMessage="Please enter your first name.">
+                                                                                                         
+
                                                 <p:ajax event="blur" update="firstNameMsg" />
                                             </p:inputText>
                                             <p:message id="firstNameMsg" for="firstName"  />
                                         </p:column>
                                         <p:column> 
                                             <h:outputLabel for="lastName" value="Last Name: " />
-                                            <p:inputText id="lastName" value="#{viewRegistration.requestor.lastName}" required="true">
+                                            <p:inputText id="lastName" value="#{viewRegistration.requestor.lastName}" required="true" requiredMessage="Please enter your last name.">
                                                 <p:ajax event="blur" update="lastNameMsg" />
                                             </p:inputText>
                                             <p:message id="lastNameMsg" for="lastName"  />
@@ -90,14 +92,14 @@
                                     <p:row>
                                         <p:column >
                                             <h:outputLabel for="companyName" value="Company Name: " />
-                                            <p:inputText id="companyName" value="#{viewRegistration.requestor.company.companyName}" required="true">
+                                            <p:inputText id="companyName" value="#{viewRegistration.requestor.company.companyName}" required="true" requiredMessage="Please enter your company's name.">
                                                 <p:ajax event="blur" update="companyNameMsg" />
                                             </p:inputText>
                                             <p:message id="companyNameMsg" for="companyName"  />
                                         </p:column>
                                         <p:column>
                                             <h:outputLabel for="companyPhone" value="Company Phone: " />
-                                            <p:inputText id="companyPhone" value="#{viewRegistration.requestor.company.companyPhone}" required="true">
+                                            <p:inputText id="companyPhone" value="#{viewRegistration.requestor.company.companyPhone}" required="true" requiredMessage="Please enter your business phone number.">
                                                 <p:ajax event="blur" update="companyPhoneMsg" />
                                             </p:inputText>
                                             <p:message id="companyPhoneMsg" for="companyPhone"  />
@@ -153,7 +155,7 @@
                                             <p:message id="companyZIPMsg" for="companyZIP"  />
 
                                             <h:outputLabel for="companyCountry" value="Country: " />
-                                            <p:inputText id="companyCountry" value="#{viewRegistration.requestor.company.companyAddress.country}" required="true">
+                                            <p:inputText id="companyCountry" value="#{viewRegistration.requestor.company.companyAddress.country}" required="true" requiredMessage="Please enter your company's country.">
                                                 <p:ajax event="blur" update="companyCountryMsg" />
                                             </p:inputText>
                                             <p:message id="companyCountryMsg" for="companyCountry"  />
@@ -166,7 +168,7 @@
                                 <p:panelGrid columns="2" >  
 
                                     <h:outputText value="Ciena Training Site: " />  
-                                    <p:selectBooleanButton value="#{viewRegistration.requestor.registration.isTrainingSite}" id="CienaTrainingSite" required="true" onLabel="Ciena Site" offLabel="Other Site" /> 
+                                    <p:selectBooleanButton value="#{viewRegistration.requestor.registration.isTrainingSite}" id="CienaTrainingSite" required="true" onLabel="Ciena Site" offLabel="Other Site" requiredMessage="Please tell us if this is a Ciena training site." /> 
 
                                 </p:panelGrid> 
 <p:message for="CienaTrainingSite"/>
@@ -186,7 +188,7 @@
                                 <p:panelGrid columns="2" >  
 
                                     <h:outputText value="Course Type:" />  
-                                    <p:selectOneButton value="#{viewRegistration.requestor.registration.courseType}" requiredMessage="Please Enter Course Type" required="true" id="CourseType">  
+                                    <p:selectOneButton value="#{viewRegistration.requestor.registration.courseType}" requiredMessage="Please Enter Course Type" required="true" id="CourseType" >  
                                         <f:selectItem itemLabel="Web Based" itemValue="Web Based" />  
                                         <f:selectItem itemLabel="Instructor-led" itemValue="Instructor Led" />  
                                         <f:selectItem itemLabel="Virtual Instructo-led" itemValue="Virtual Instructo-led" />  
@@ -208,7 +210,7 @@
 
                                         <p:column>
                                             <h:outputLabel for="courseName" value="Course/Kit Name: " />
-                                            <p:inputText id="courseName" value="#{viewRegistration.requestor.registration.courseName}" required="true">
+                                            <p:inputText id="courseName" value="#{viewRegistration.requestor.registration.courseName}" required="true" requiredMessage="Please enter Course/Kit name.">
                                                 <p:ajax event="blur" update="courseNameMsg" />
                                             </p:inputText>
                                             <p:message id="courseNameMsg" for="courseName"  />
