@@ -52,9 +52,11 @@ public class ViewRegistration implements Serializable {
         
         sendOutEmail();
         
+        //reset all variables in case user doing again since this is session scoped :P
         requestor = new Requestor();
         registrationDAO = new RegistrationDAO();
         this.requestor.getRegistration().setRegistrationDate(getCurrentDate());
+        blankStudentAdded = false;
         
     }
 
