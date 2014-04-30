@@ -41,6 +41,8 @@ public class ViewRegistration implements Serializable {
     private RegistrationDAO registrationDAO = new RegistrationDAO();
     
     public ViewRegistration() {
+        requestor = new Requestor();
+        registrationDAO = new RegistrationDAO();
         this.requestor.getRegistration().setRegistrationDate(getCurrentDate());
     }
 
@@ -49,6 +51,11 @@ public class ViewRegistration implements Serializable {
         registrationDAO.Add(requestor);
         
         sendOutEmail();
+        
+        requestor = new Requestor();
+        registrationDAO = new RegistrationDAO();
+        this.requestor.getRegistration().setRegistrationDate(getCurrentDate());
+        
     }
 
     public void addStudent() {
