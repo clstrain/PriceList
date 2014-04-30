@@ -3,16 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.aperea.clscustomerforms;
 
-import javax.ejb.Local;
+import java.io.Serializable;
+import org.hibernate.Session;
 
 /**
  *
  * @author Armando
  */
-@Local
-public interface RegistrationDAO {
-    public void Add(Requestor requestor);
+public class RegistrationDAO implements Serializable {
+
+    public void Add(Requestor requestor) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        session.beginTransaction();
+
+        session.save(requestor);
+        session.getTransaction().commit();
+
+    }
+
+    
+
 }

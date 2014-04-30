@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"  > 
+
+    <h:head>
+        <title>Ciena Individual Training Registration Form</title>
+
+        <link rel="stylesheet" href="style.css" type="text/css"
+              media="screen, projection" />
+    </h:head>
+
+    <h:body>
+        
+        <div id="wrapper">
+
+            <div id="header">
+                <img src="gfx/Learning_Solutions_II.jpg" align ="left" alt="Ciena Learning Solutions"/>
+                <img src="gfx/spectrum.png" />
+                <p>Ciena Individual Training Registration Form</p>
+            </div>
+            
+         <p:panel id="thanks" header="Thank You" style="margin-top:10px;"  >  
+
+             <h:outputText value="Thank you, #{viewRegistration.requestor.firstName} #{viewRegistration.requestor.lastName}. Your request has been submitted to the training coordinator." />  
+
+
+                        <img src="gfx/emo75.gif" alt="thanks!" />
+                    </p:panel> 
+        </div>
+        
+    </h:body>
+
+</html>

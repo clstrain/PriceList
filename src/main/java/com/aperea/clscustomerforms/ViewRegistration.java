@@ -11,12 +11,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -31,20 +29,19 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author Armando
  */
-@Named("viewRegistration")
+@ManagedBean(name="viewRegistration")
 @SessionScoped
 public class ViewRegistration implements Serializable {
 
     private Requestor requestor = new Requestor();
 
     private Boolean blankStudentAdded = false;
-
-    @Inject
-    RegistrationDAO registrationDAO;
-
-    @PostConstruct
-    public void init() {
-        requestor.getRegistration().setRegistrationDate(getCurrentDate());
+  
+    
+    private RegistrationDAO registrationDAO = new RegistrationDAO();
+    
+    public ViewRegistration() {
+        this.requestor.getRegistration().setRegistrationDate(getCurrentDate());
     }
 
     public void submit() {
@@ -69,7 +66,7 @@ public class ViewRegistration implements Serializable {
         this.requestor = requestor;
     }
     
-    public Date getCurrentDate() {
+    private Date getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();

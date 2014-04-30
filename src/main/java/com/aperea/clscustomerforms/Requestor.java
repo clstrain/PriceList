@@ -28,10 +28,10 @@ public class Requestor implements Serializable {
 
     private String firstName, lastName, email;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Company company;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
    private Registration registration;
 
     public Requestor() {

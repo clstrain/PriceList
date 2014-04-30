@@ -34,7 +34,7 @@ public class Registration implements Serializable {
     @OneToOne(mappedBy = "registration",cascade=CascadeType.ALL)
     private Requestor requestor;
     
-    @OneToMany(cascade=CascadeType.PERSIST)
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Student> students;
     
     private boolean isTrainingSite;
@@ -61,10 +61,10 @@ public class Registration implements Serializable {
     
     private boolean isAgree;
     
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne(cascade=CascadeType.ALL)
     private Address siteAddress;
     
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne(cascade=CascadeType.ALL)
     private Address shippingAddress;
     
     private String pocFirstName, pocLastName;
