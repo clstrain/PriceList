@@ -96,6 +96,12 @@
             <version>5.1.26</version>
         </dependency>
         
+        <dependency>
+	<groupId>org.apache.derby</groupId>
+	<artifactId>derbyclient</artifactId>
+	<version>10.10.2.0</version>
+</dependency>
+            
                 
         <dependency>  
             <groupId>org.primefaces</groupId>  
@@ -133,8 +139,7 @@
 <dependency>
     <groupId>org.hibernate</groupId>
     <artifactId>hibernate-entitymanager</artifactId>
-    <version>4.2.6.Final</version>
-    <scope>provided</scope>
+    <version>4.1.8.Final</version>
 </dependency>  
          <dependency>
 		<groupId>commons-logging</groupId>
@@ -152,8 +157,15 @@
             <version>SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>hibernate-jpa-2.0-api-1.0.1.Final</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 </project>
