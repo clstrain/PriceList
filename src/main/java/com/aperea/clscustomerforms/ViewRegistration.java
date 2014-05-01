@@ -146,7 +146,7 @@ public class ViewRegistration implements Serializable {
             Message message = new MimeMessage(session);
            // message.setFrom(new InternetAddress("techtrng.course.reg@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("aleoperea@yahoo.com"));
+                    InternetAddress.parse("techtng@ciena.com"));
             message.setSubject(this.getRequestor().getRegistration().getCourseName()+" Course Registration on "+this.getRequestor().getRegistration().getCourseDate());
             message.setText("This is an automated email."
                     +"\n\n Ciena Course Dedicated Registration information follows:"
