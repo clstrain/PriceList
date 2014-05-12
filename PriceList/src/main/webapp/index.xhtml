@@ -106,51 +106,6 @@
                                   value ="#{courseList.response}" />                  
 
                     
-                     <p:dialog id="dialog" header="Course Detail" widgetVar="courseDialog" resizable="true"  
-                              width="500" showEffect="clip" hideEffect="fold">  
-
-                        <h:panelGrid id="display" columns="2" cellpadding="4">  
-
-                            <f:facet name="header">                              
-
-                                <h:outputText value="#{courseList.selectedCourse.superProduct}" />
-                                <br />
-                                <h:outputText value="#{courseList.selectedCourse.number}" />
-                            </f:facet>
-                            
-                            <h:outputText value="Category " />  
-                            <h:outputText value="#{courseList.selectedCourse.category}" /> 
-
-                            <h:outputText value="Products: " />  
-                            <h:outputText value="#{courseList.selectedCourse.product} #{courseList.selectedCourse.getSubProduct()}" /> 
-
-
-                            <h:outputText value="Description: " />  
-                            <h:outputText value="#{courseList.selectedCourse.name}" /> 
-
-                            <h:outputText value="Unit: " />  
-                            <h:outputText value="#{courseList.selectedCourse.unit}" /> 
-
-                            <h:outputText value="Role: " />  
-                            <h:outputText value="#{courseList.selectedCourse.role}" />
-
-                            <h:outputText value="Duration: " />  
-                            <h:outputText value="#{courseList.selectedCourse.duration}" />
-
-                            <h:outputText value="Max Students: " />  
-                            <h:outputText value="#{courseList.selectedCourse.maxNumStudents}" />
-
-                            <h:outputText value="Price: " />  
-                            <h:outputText value="#{courseList.selectedCourse.price}">
-                                <f:convertNumber type="currency" currencyCode="USD" currencySymbol="$"/>
-                            </h:outputText>
-
-                            <p></p>
-                            <p:commandButton value="Add to List" actionListener="#{courseList.addToCart()}"   
-                                             update="shoppingCart"  /> 
-
-                        </h:panelGrid>  
-                    </p:dialog> 
                     
                 </h:form>
                 
