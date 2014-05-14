@@ -3,16 +3,18 @@ package PriceList;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.ListDataModel;
-
+import javax.faces.model.SelectItem;
 import org.primefaces.model.SelectableDataModel;
 
 @ManagedBean(name = "courseList")
 @SessionScoped
+
 public class CourseTableBean extends ListDataModel<CourseListing>
         implements SelectableDataModel<CourseListing>, Serializable {
 
@@ -23,11 +25,12 @@ public class CourseTableBean extends ListDataModel<CourseListing>
             superProduct, subProduct;
     private String response;
     public CourseListing selectedCourse, selectedShoppingcartCourse;
+    private LinkedHashSet<SelectItem> locationSelectItems, categorySelectItems, typeSelectItems, roleSelectItems;
 
     public CourseTableBean() {
 
-        response = "Welcome to the interactive price list. You may use "
-                + "the drop down menus above to narrow your search.";
+        CourseDAO courseDAO = new CourseDAO();
+        response = "Welcome to the interactive price list.";
 
         try {
             System.out.println("Loading driver...");
@@ -39,16 +42,29 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         }
 
         shoppingCartList = new ArrayList<CourseListing>();
-    }
 
-    public String go() {
+        courses = courseDAO.getAll();
 
-        CourseDAO courseDAO = new CourseDAO();
-        courses = courseDAO.searchFor(superProduct, product, location,
-                type, category);
         response = courseDAO.response;
 
-        return "courseList.xhtml";
+        //populate the location dropdown box
+        locationSelectItems = new LinkedHashSet<SelectItem>();
+        categorySelectItems = new LinkedHashSet<SelectItem>();
+        typeSelectItems = new LinkedHashSet<SelectItem>();
+        roleSelectItems = new LinkedHashSet<SelectItem>();
+
+        locationSelectItems.add(new SelectItem("", "Any"));
+        categorySelectItems.add(new SelectItem("", "Any"));
+        typeSelectItems.add(new SelectItem("", "Any"));
+        roleSelectItems.add(new SelectItem("", "Any"));
+
+        for (CourseListing courseListing : courses) {
+            locationSelectItems.add(new SelectItem(courseListing.getLocation()));
+            categorySelectItems.add(new SelectItem(courseListing.getCategory()));
+            typeSelectItems.add(new SelectItem(courseListing.getType()));
+            roleSelectItems.add(new SelectItem(courseListing.getRole()));
+
+        }
     }
 
     public void processProductChange() {
@@ -57,41 +73,6 @@ public class CourseTableBean extends ListDataModel<CourseListing>
 
     public void processSuperProductChange() {
         this.setproduct(null);
-    }
-
-    public void reset() {
-        this.setnumber(null);
-        this.setproduct(null);
-        this.setname(null);
-        this.setlocation(null);
-        this.setunit(null);
-        this.setduration(null);
-        this.settype(null);
-        this.setrole(null);
-        this.setcategory(null);
-        this.setprice(null);
-        this.setmaxNumStudents(null);
-        this.setSubProduct(null);
-        this.setSuperProduct(null);
-
-        this.setSelectedCourse(null);
-
-        this.setCourses(null);
-
-        this.setFilteredCourses(null);
-
-        response = "Welcome to the interactive price list. "
-                + "You may use the drop down menus above to narrow "
-                + "your search.";
-
-    }
-
-    public String goIndex() {
-
-        response = "Hint: you can select Search without any filters in order to "
-                + "see the full course list.";
-
-        return "index.xhtml";
     }
 
     public void addToCart() {
@@ -259,6 +240,42 @@ public class CourseTableBean extends ListDataModel<CourseListing>
     public void setSubProduct(String subProduct) {
         CourseTableBean.subProduct = subProduct;
     }
+
+    public HashSet<SelectItem> getLocationSelectItems() {
+        return locationSelectItems;
+    }
+
+    
+    public void setLocationSelectItems(LinkedHashSet<SelectItem> locationSelectItems) {
+        this.locationSelectItems = locationSelectItems;
+    }
+
+    public LinkedHashSet<SelectItem> getCategorySelectItems() {
+        return categorySelectItems;
+    }
+
+    public void setCategorySelectItems(LinkedHashSet<SelectItem> categorySelectItems) {
+        this.categorySelectItems = categorySelectItems;
+    }
+
+    public LinkedHashSet<SelectItem> getTypeSelectItems() {
+        return typeSelectItems;
+    }
+
+    public void setTypeSelectItems(LinkedHashSet<SelectItem> typeSelectItems) {
+        this.typeSelectItems = typeSelectItems;
+    }
+
+    public LinkedHashSet<SelectItem> getRoleSelectItems() {
+        return roleSelectItems;
+    }
+
+    public void setRoleSelectItems(LinkedHashSet<SelectItem> roleSelectItems) {
+        this.roleSelectItems = roleSelectItems;
+    }
+
+   
+ 
 
     public List<CourseListing> getShoppingCartList() {
         return shoppingCartList;

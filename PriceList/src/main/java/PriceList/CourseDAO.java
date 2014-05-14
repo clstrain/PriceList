@@ -17,34 +17,29 @@ public class CourseDAO implements Serializable {
     private Connection conn = null;
     private Statement stmt = null;
     private CallableStatement cstmt = null;
-    
-   
+/* 
     private final String userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
     private final String password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     private final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
     private final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
     private final String dbName = "plcls";
-        
-    /*
-     private final String userName = "adminCBjUYQI";
-     private final String password = "ESmteQ_Mm4BR";
-     private final String host = "127.0.0.1";
+     */
+    
+     private final String userName = "root";
+     private final String password = "passw0rd";
+     private final String host = "localhost";
      private final String port = "3306";
      private final String dbName = "plcls";
-    */
     
     private final String url = "jdbc:mysql://" + host + ":" + port + "/"
             + dbName;
 
-    public CourseDAO() {
+     public CourseDAO() {
     }
 
-    public List<CourseListing> searchFor(String superProduct, String product,
-            String location, String type, String category) {
-
+    public List<CourseListing> getAll() {
 
         List<CourseListing> courseListing = new ArrayList<CourseListing>();
-
 
         try {
             //Connect to database
@@ -61,25 +56,9 @@ public class CourseDAO implements Serializable {
                     + "ON CourseProduct.number=Course.number "
                     + "inner join Product "
                     + "on CourseProduct.P_ID=Product.P_ID "
-                    + "WHERE "
-                    + "(superProduct = ? or ? ='') "
-                    + "and (product = ? or ? ='') "
-                    + "and (location = ? or ? ='') "
-                    + "and (type = ? or ? ='') "
-                    + "and (category = ? or ? ='') "
                     + "group by Course.number");
 
-            pstmt.setString(1, superProduct);
-            pstmt.setString(2, superProduct);
-            pstmt.setString(3, product);
-            pstmt.setString(4, product);
-            pstmt.setString(5, location);
-            pstmt.setString(6, location);
-            pstmt.setString(7, type);
-            pstmt.setString(8, type);
-            pstmt.setString(9, category);
-            pstmt.setString(10, category);
-
+           
             rset = pstmt.executeQuery();
 
             while (rset.next()) {
@@ -121,7 +100,6 @@ public class CourseDAO implements Serializable {
                         tempProduct));
             }
 
-
             this.response = "Searched";
 
         } catch (SQLException e) {
@@ -147,4 +125,6 @@ public class CourseDAO implements Serializable {
         return courseListing;
 
     }
+    
+    
 }
