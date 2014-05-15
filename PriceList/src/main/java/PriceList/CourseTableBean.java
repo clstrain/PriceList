@@ -2,6 +2,8 @@ package PriceList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,7 +27,11 @@ public class CourseTableBean extends ListDataModel<CourseListing>
             superProduct, subProduct;
     private String response;
     public CourseListing selectedCourse, selectedShoppingcartCourse;
-    private LinkedHashSet<SelectItem> locationSelectItems, categorySelectItems, typeSelectItems, roleSelectItems;
+
+    private List<SelectItem> locationSelectItems = new ArrayList<SelectItem>(),
+            categorySelectItems = new ArrayList<SelectItem>(),
+            typeSelectItems = new ArrayList<SelectItem>(),
+            roleSelectItems = new ArrayList<SelectItem>();
 
     public CourseTableBean() {
 
@@ -47,23 +53,53 @@ public class CourseTableBean extends ListDataModel<CourseListing>
 
         response = courseDAO.response;
 
-        //populate the location dropdown box
-        locationSelectItems = new LinkedHashSet<SelectItem>();
-        categorySelectItems = new LinkedHashSet<SelectItem>();
-        typeSelectItems = new LinkedHashSet<SelectItem>();
-        roleSelectItems = new LinkedHashSet<SelectItem>();
+        //load the dropdown lists into HashSets in order to remove dupes 
+        Set<String> locations = new HashSet<String>();
+        Set<String> categories = new HashSet<String>();
+        Set<String> types = new HashSet<String>();
+        Set<String> roles = new HashSet<String>();
+
+        for (CourseListing courseListing : courses) {
+            locations.add(courseListing.getLocation());
+            categories.add(courseListing.getCategory());
+            types.add(courseListing.getType());
+            roles.add(courseListing.getRole());
+        }
+
+        //setup selectItems
+        locationSelectItems = new ArrayList<SelectItem>();
+        categorySelectItems = new ArrayList<SelectItem>();
+        typeSelectItems = new ArrayList<SelectItem>();
+        roleSelectItems = new ArrayList<SelectItem>();
 
         locationSelectItems.add(new SelectItem("", "Any"));
         categorySelectItems.add(new SelectItem("", "Any"));
         typeSelectItems.add(new SelectItem("", "Any"));
         roleSelectItems.add(new SelectItem("", "Any"));
 
-        for (CourseListing courseListing : courses) {
-            locationSelectItems.add(new SelectItem(courseListing.getLocation()));
-            categorySelectItems.add(new SelectItem(courseListing.getCategory()));
-            typeSelectItems.add(new SelectItem(courseListing.getType()));
-            roleSelectItems.add(new SelectItem(courseListing.getRole()));
-
+        //place strings in to SelectItems
+        for (String stringIterator : locations) {
+            if (!stringIterator.isEmpty()) {
+                locationSelectItems.add(new SelectItem(stringIterator));
+            }
+        }
+        
+         for (String stringIterator : categories) {
+            if (!stringIterator.isEmpty()) {
+                categorySelectItems.add(new SelectItem(stringIterator));
+            }
+        }
+         
+          for (String stringIterator : types) {
+            if (!stringIterator.isEmpty()) {
+                typeSelectItems.add(new SelectItem(stringIterator));
+            }
+        }
+          
+           for (String stringIterator : roles) {
+            if (!stringIterator.isEmpty()) {
+                roleSelectItems.add(new SelectItem(stringIterator));
+            }
         }
     }
 
@@ -92,7 +128,6 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         } else {
             shoppingCartList.remove(selectedShoppingcartCourse);
         }
-
     }
 
     public String getResponse() {
@@ -241,41 +276,37 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         CourseTableBean.subProduct = subProduct;
     }
 
-    public HashSet<SelectItem> getLocationSelectItems() {
+    public List<SelectItem> getLocationSelectItems() {
         return locationSelectItems;
     }
 
-    
-    public void setLocationSelectItems(LinkedHashSet<SelectItem> locationSelectItems) {
+    public void setLocationSelectItems(List<SelectItem> locationSelectItems) {
         this.locationSelectItems = locationSelectItems;
     }
 
-    public LinkedHashSet<SelectItem> getCategorySelectItems() {
+    public List<SelectItem> getCategorySelectItems() {
         return categorySelectItems;
     }
 
-    public void setCategorySelectItems(LinkedHashSet<SelectItem> categorySelectItems) {
+    public void setCategorySelectItems(List<SelectItem> categorySelectItems) {
         this.categorySelectItems = categorySelectItems;
     }
 
-    public LinkedHashSet<SelectItem> getTypeSelectItems() {
+    public List<SelectItem> getTypeSelectItems() {
         return typeSelectItems;
     }
 
-    public void setTypeSelectItems(LinkedHashSet<SelectItem> typeSelectItems) {
+    public void setTypeSelectItems(List<SelectItem> typeSelectItems) {
         this.typeSelectItems = typeSelectItems;
     }
 
-    public LinkedHashSet<SelectItem> getRoleSelectItems() {
+    public List<SelectItem> getRoleSelectItems() {
         return roleSelectItems;
     }
 
-    public void setRoleSelectItems(LinkedHashSet<SelectItem> roleSelectItems) {
+    public void setRoleSelectItems(List<SelectItem> roleSelectItems) {
         this.roleSelectItems = roleSelectItems;
     }
-
-   
- 
 
     public List<CourseListing> getShoppingCartList() {
         return shoppingCartList;
