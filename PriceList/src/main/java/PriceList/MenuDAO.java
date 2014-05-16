@@ -25,8 +25,8 @@ public class MenuDAO implements Serializable {
     private final String dbName = "plcls";
          */
   
-   private final String userName = "root";
-     private final String password = "passw0rd";
+   private final String userName = "adminZfLaJBu";
+     private final String password = "2y8aFmfFilmV";
      private final String host = "localhost";
      private final String port = "3306";
      private final String dbName = "plcls";

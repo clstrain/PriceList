@@ -2,14 +2,13 @@ package PriceList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.SelectableDataModel;
@@ -25,17 +24,26 @@ public class CourseTableBean extends ListDataModel<CourseListing>
     public static String number, product, name, location, unit, duration,
             type, role, category, price, maxNumStudents,
             superProduct, subProduct;
-    private String response;
+    private String response, selectedCategory, selectedType;
     public CourseListing selectedCourse, selectedShoppingcartCourse;
 
     private List<SelectItem> locationSelectItems = new ArrayList<SelectItem>(),
-            categorySelectItems = new ArrayList<SelectItem>(),
             typeSelectItems = new ArrayList<SelectItem>(),
-            roleSelectItems = new ArrayList<SelectItem>();
+            roleSelectItems = new ArrayList<SelectItem>(),
+            categorySelectItems = new ArrayList<SelectItem>();
+
+    private List<SelectItem> 
+            toptypeSelectItems = new ArrayList<SelectItem>(),
+            topcategorySelectItems = new ArrayList<SelectItem>();
+
+    CourseDAO courseDAO = new CourseDAO();
 
     public CourseTableBean() {
 
-        CourseDAO courseDAO = new CourseDAO();
+        courseDAO = new CourseDAO();
+
+        selectedCategory = new String();
+
         response = "Welcome to the interactive price list.";
 
         try {
@@ -68,39 +76,126 @@ public class CourseTableBean extends ListDataModel<CourseListing>
 
         //setup selectItems
         locationSelectItems = new ArrayList<SelectItem>();
-        categorySelectItems = new ArrayList<SelectItem>();
         typeSelectItems = new ArrayList<SelectItem>();
         roleSelectItems = new ArrayList<SelectItem>();
+        categorySelectItems = new ArrayList<SelectItem>();
 
-        locationSelectItems.add(new SelectItem("", "Any"));
-        categorySelectItems.add(new SelectItem("", "Any"));
-        typeSelectItems.add(new SelectItem("", "Any"));
-        roleSelectItems.add(new SelectItem("", "Any"));
+        locationSelectItems.add(new SelectItem("", "All"));
+        typeSelectItems.add(new SelectItem("", "All"));
+        roleSelectItems.add(new SelectItem("", "All"));
+        categorySelectItems.add(new SelectItem("", "All"));
+
+        //setup selectItems
+        toptypeSelectItems = new ArrayList<SelectItem>();
+        topcategorySelectItems = new ArrayList<SelectItem>();
+
+        toptypeSelectItems.add(new SelectItem("", "All"));
+        topcategorySelectItems.add(new SelectItem("", "All"));
 
         //place strings in to SelectItems
         for (String stringIterator : locations) {
             if (!stringIterator.isEmpty()) {
                 locationSelectItems.add(new SelectItem(stringIterator));
+
             }
         }
-        
-         for (String stringIterator : categories) {
-            if (!stringIterator.isEmpty()) {
-                categorySelectItems.add(new SelectItem(stringIterator));
-            }
-        }
-         
-          for (String stringIterator : types) {
+
+        for (String stringIterator : types) {
             if (!stringIterator.isEmpty()) {
                 typeSelectItems.add(new SelectItem(stringIterator));
+                toptypeSelectItems.add(new SelectItem(stringIterator));
+
             }
         }
-          
-           for (String stringIterator : roles) {
+
+        for (String stringIterator : roles) {
             if (!stringIterator.isEmpty()) {
                 roleSelectItems.add(new SelectItem(stringIterator));
+
             }
         }
+
+        for (String stringIterator : categories) {
+            if (!stringIterator.isEmpty()) {
+                categorySelectItems.add(new SelectItem(stringIterator));
+                topcategorySelectItems.add(new SelectItem(stringIterator));
+
+            }
+        }
+    }
+
+    public void updateCourseList() {
+        courses = courseDAO.getByCategory(selectedCategory, selectedType);
+
+        if (selectedCategory.isEmpty() && selectedType != null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing courses for type " + selectedType));
+        } else if (selectedType.isEmpty() && selectedCategory != null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing courses for category " + selectedCategory));
+        } else if (selectedType == null && selectedCategory == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing all courses"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing courses for category " + selectedCategory + " and type " + selectedType));
+        }
+
+        //redo the datatable menus
+        //load the dropdown lists into HashSets in order to remove dupes 
+        Set<String> locations = new HashSet<String>();
+        Set<String> categories = new HashSet<String>();
+        Set<String> types = new HashSet<String>();
+        Set<String> roles = new HashSet<String>();
+
+        for (CourseListing courseListing : courses) {
+            locations.add(courseListing.getLocation());
+            categories.add(courseListing.getCategory());
+            types.add(courseListing.getType());
+            roles.add(courseListing.getRole());
+        }
+
+        //setup selectItems
+        locationSelectItems = new ArrayList<SelectItem>();
+        typeSelectItems = new ArrayList<SelectItem>();
+        roleSelectItems = new ArrayList<SelectItem>();
+        categorySelectItems = new ArrayList<SelectItem>();
+
+        locationSelectItems.add(new SelectItem("", "All"));
+        typeSelectItems.add(new SelectItem("", "All"));
+        roleSelectItems.add(new SelectItem("", "All"));
+        categorySelectItems.add(new SelectItem("", "All"));
+
+        //place strings in to SelectItems
+        for (String stringIterator : locations) {
+            if (!stringIterator.isEmpty()) {
+                locationSelectItems.add(new SelectItem(stringIterator));
+
+            }
+        }
+
+        for (String stringIterator : types) {
+            if (!stringIterator.isEmpty()) {
+                typeSelectItems.add(new SelectItem(stringIterator));
+
+            }
+        }
+
+        for (String stringIterator : roles) {
+            if (!stringIterator.isEmpty()) {
+                roleSelectItems.add(new SelectItem(stringIterator));
+
+            }
+        }
+
+        for (String stringIterator : categories) {
+            if (!stringIterator.isEmpty()) {
+                categorySelectItems.add(new SelectItem(stringIterator));
+
+            }
+        }
+
+    }
+
+    public void showAllCategories() {
+        System.out.println(" derp " + selectedCategory);
+
     }
 
     public void processProductChange() {
@@ -284,14 +379,6 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         this.locationSelectItems = locationSelectItems;
     }
 
-    public List<SelectItem> getCategorySelectItems() {
-        return categorySelectItems;
-    }
-
-    public void setCategorySelectItems(List<SelectItem> categorySelectItems) {
-        this.categorySelectItems = categorySelectItems;
-    }
-
     public List<SelectItem> getTypeSelectItems() {
         return typeSelectItems;
     }
@@ -331,4 +418,47 @@ public class CourseTableBean extends ListDataModel<CourseListing>
     public CourseListing getRowData(String string) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public List<SelectItem> getCategorySelectItems() {
+        return categorySelectItems;
+    }
+
+    public void setCategorySelectItems(List<SelectItem> categorySelectItems) {
+        this.categorySelectItems = categorySelectItems;
+    }
+
+    public String getSelectedCategory() {
+        return selectedCategory;
+    }
+
+    public void setSelectedCategory(String selectedCategory) {
+        this.selectedCategory = selectedCategory;
+    }
+
+    public String getSelectedType() {
+        return selectedType;
+    }
+
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
+    }
+
+
+    public List<SelectItem> getToptypeSelectItems() {
+        return toptypeSelectItems;
+    }
+
+    public void setToptypeSelectItems(List<SelectItem> toptypeSelectItems) {
+        this.toptypeSelectItems = toptypeSelectItems;
+    }
+
+
+    public List<SelectItem> getTopcategorySelectItems() {
+        return topcategorySelectItems;
+    }
+
+    public void setTopcategorySelectItems(List<SelectItem> topcategorySelectItems) {
+        this.topcategorySelectItems = topcategorySelectItems;
+    }
+
 }
