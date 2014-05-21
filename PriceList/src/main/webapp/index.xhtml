@@ -24,29 +24,29 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
             <div id="content">
                 <h:form id="courseListForm">    
-
+ 
                     <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>
 
                     <p:dialog modal="true" widgetVar="statusDialog" 
                               draggable="false" closable="false" showEffect="">
                         <p:graphicImage value="../gfx/ajax-loader.gif" />
                     </p:dialog>
-
+    
                     <p:panelGrid id="categoryTypeDropDownLists"  columns="2">
                         <p:column colspan="2"> 
                             <p>   <h:outputText value="Category: " /></p>
-                            <p:selectOneMenu  value="#{courseList.selectedCategory}" >
-                                <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
+                            <p:selectOneMenu  value="#{courseList.selectedCategory}">                                
                                 <f:selectItems value="#{courseList.topcategorySelectItems}"/>
-                            </p:selectOneMenu></p:column>
-
+                                <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
+                            </p:selectOneMenu>
+                        </p:column>
+   
                         <p:column colspan="2">
                             <p> <h:outputText value="Type: " /></p>
-                            <p:selectOneMenu  value="#{courseList.selectedType}" >
-                                <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
+                            <p:selectOneMenu  value="#{courseList.selectedType}">
                                 <f:selectItems value="#{courseList.toptypeSelectItems}"/>
+                                <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
                             </p:selectOneMenu>
-
                         </p:column>
 
                     </p:panelGrid>
