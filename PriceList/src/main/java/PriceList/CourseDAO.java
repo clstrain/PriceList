@@ -17,20 +17,20 @@ public class CourseDAO implements Serializable {
     private Connection conn = null;
     private Statement stmt = null;
     private CallableStatement cstmt = null;
- 
+  /* 
     private final String userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
     private final String password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     private final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
     private final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
     private final String dbName = "plcls";
-   
-     /* 
+    */
+    
      private final String userName = "adminZfLaJBu";
      private final String password = "2y8aFmfFilmV";
      private final String host = "localhost";
      private final String port = "3306";
      private final String dbName = "plcls";
-    */
+   
     private final String url = "jdbc:mysql://" + host + ":" + port + "/"
             + dbName;
 
@@ -406,5 +406,58 @@ public class CourseDAO implements Serializable {
     }
 
     
+    public List<String> getmenuItemsProduct() {
+
+        List<String> menuItemsProduct = new ArrayList<String>() {
+            private static final long serialVersionUID = 3109256773218160486L;
+
+            {
+                try {
+                    //Connect to database
+
+                    conn = DriverManager.getConnection(url, userName, password);
+
+                    stmt = conn.createStatement();
+
+                    ResultSet rset = null;
+
+                    PreparedStatement pstmt = null;
+
+                    pstmt = conn.prepareStatement("select distinct product from"
+                            + " Product order by product asc");
+
+                    rset = pstmt.executeQuery();
+
+                    while (rset.next()) {
+                        add(rset.getString("product"));
+                    }
+
+
+                } catch (SQLException e) {
+                    response = "SQLException: " + e.getMessage();
+                    while ((e = e.getNextException()) != null) {
+                        response = e.getMessage();
+                    }
+                } finally {
+                    try {
+                        if (stmt != null) {
+                            stmt.close();
+                        }
+                        if (conn != null) {
+                            conn.close();
+                        }
+                    } catch (SQLException e) {
+                        response = "SQLException: " + e.getMessage();
+                        while ((e = e.getNextException()) != null) {
+                            response = e.getMessage();
+                        }
+                    }
+                }
+            }
+        };
+
+        return menuItemsProduct;
+    }
+
     
 }
