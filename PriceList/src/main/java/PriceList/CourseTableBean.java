@@ -2,6 +2,7 @@ package PriceList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
@@ -26,20 +26,23 @@ public class CourseTableBean extends ListDataModel<CourseListing>
     public static String number, product, name, location, unit, duration,
             type, role, category, price, maxNumStudents,
             superProduct, subProduct;
-    private String response, selectedCategory, selectedType;
+    private String response, selectedCategory="", selectedType="";
     public CourseListing selectedCourse, selectedShoppingcartCourse;
 
     private List<SelectItem> locationSelectItems = new ArrayList<SelectItem>(),
             typeSelectItems = new ArrayList<SelectItem>(),
             roleSelectItems = new ArrayList<SelectItem>(),
-            categorySelectItems = new ArrayList<SelectItem>();
+            categorySelectItems = new ArrayList<SelectItem>(),
+            productSelectItems = new ArrayList<SelectItem>();
 
     private List<SelectItem> toptypeSelectItems = new ArrayList<SelectItem>(),
             topcategorySelectItems = new ArrayList<SelectItem>();
+    
 
     CourseDAO courseDAO = new CourseDAO();
 
-    public CourseTableBean() {
+    @PostConstruct
+    public void init() {
 
         response = "Welcome to the interactive price list.";
 
@@ -59,6 +62,9 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         courses = courseDAO.getAll();
 
         response = courseDAO.response;
+        
+        selectedCategory="";
+        selectedType="";
 
         //load the dropdown lists into HashSets in order to remove dupes 
         Set<String> categories = new HashSet<String>();
@@ -68,13 +74,17 @@ public class CourseTableBean extends ListDataModel<CourseListing>
             categories.add(courseListing.getCategory());
             types.add(courseListing.getType());
         }
-
+        
         //setup selectItems
         toptypeSelectItems = new ArrayList<SelectItem>();
         topcategorySelectItems = new ArrayList<SelectItem>();
+        productSelectItems = new ArrayList<SelectItem>();
 
-        toptypeSelectItems.add(new SelectItem("", "All"));
-        topcategorySelectItems.add(new SelectItem("", "All"));
+        toptypeSelectItems.add(new SelectItem("", "Select One"));
+        topcategorySelectItems.add(new SelectItem("", "Select One"));
+        productSelectItems.add(new SelectItem("", "Select One"));
+
+        List<String>products = new ArrayList<String>(courseDAO.getmenuItemsProduct());
 
         //place strings in to SelectItems
         for (String stringIterator : types) {
@@ -87,24 +97,32 @@ public class CourseTableBean extends ListDataModel<CourseListing>
             if (!stringIterator.isEmpty()) {
                 topcategorySelectItems.add(new SelectItem(stringIterator));
             }
+        } 
+        
+        for (String stringIterator : products) {
+            if (!stringIterator.isEmpty()) {
+                productSelectItems.add(new SelectItem(stringIterator));
+            }
         }
 
+        //load products menu
+                
         LoadDataTableMenus();
     }
 
     public void updateCourseList() {
         courses.clear();
 
-        if (selectedCategory == null && selectedType != null) {
+        if ("".equals(selectedCategory) && !"".equals(selectedType)) {
             courses = courseDAO.getByType(selectedType);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing courses for type " + selectedType));
-        } else if (selectedType == null && selectedCategory != null) {
+        } else if ("".equals(selectedType) && !"".equals(selectedCategory)) {
             courses = courseDAO.getByCategory(selectedCategory);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing courses for category " + selectedCategory));
-        } else if (selectedType == null && selectedCategory == null) {
+        } else if ("".equals(selectedType) && "".equals(selectedCategory)) {
             courses = courseDAO.getAll();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing all courses"));
-        } else if (selectedType != null && selectedCategory != null) {
+        } else if (!"".equals(selectedType) && !"".equals(selectedCategory)) {
             courses = courseDAO.getByCategoryAndType(selectedCategory, selectedType);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated", "Showing courses for category " + selectedCategory + " and type "+selectedType));
         }
@@ -376,6 +394,16 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         this.topcategorySelectItems = topcategorySelectItems;
     }
 
+    public List<SelectItem> getProductSelectItems() {
+        return productSelectItems;
+    }
+
+    public void setProductSelectItems(List<SelectItem> productSelectItems) {
+        this.productSelectItems = productSelectItems;
+    }
+    
+    
+
     private void LoadDataTableMenus() {
 
         //load the dropdown lists into HashSets in order to remove dupes 
@@ -383,49 +411,63 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         Set<String> categories = new HashSet<String>();
         Set<String> types = new HashSet<String>();
         Set<String> roles = new HashSet<String>();
-
+        
         for (CourseListing courseListing : courses) {
             locations.add(courseListing.getLocation());
             categories.add(courseListing.getCategory());
             types.add(courseListing.getType());
             roles.add(courseListing.getRole());
         }
-
+        
+        //now load the dropdown lists into array lists in order to sort them abc
+        List<String> locationsArrayList = new ArrayList<String>(locations);
+        List<String> categoriesArrayList = new ArrayList<String>(categories);
+        List<String> typesArrayList = new ArrayList<String>(types);
+        List<String> rolesArrayList = new ArrayList<String>(roles);
+                       
+        Collections.sort(locationsArrayList);
+        Collections.sort(categoriesArrayList);
+        Collections.sort(typesArrayList);
+        Collections.sort(rolesArrayList);
+             
         //setup selectItems
         locationSelectItems = new ArrayList<SelectItem>();
         typeSelectItems = new ArrayList<SelectItem>();
         roleSelectItems = new ArrayList<SelectItem>();
         categorySelectItems = new ArrayList<SelectItem>();
 
-        locationSelectItems.add(new SelectItem("", "All"));
-        typeSelectItems.add(new SelectItem("", "All"));
-        roleSelectItems.add(new SelectItem("", "All"));
-        categorySelectItems.add(new SelectItem("", "All"));
+        
+        locationSelectItems.add(new SelectItem("", "Select One"));
+        typeSelectItems.add(new SelectItem("", "Select One"));
+        roleSelectItems.add(new SelectItem("", "Select One"));
+        categorySelectItems.add(new SelectItem("", "Select One"));
 
         //place strings in to SelectItems
-        for (String stringIterator : locations) {
+        for (String stringIterator : locationsArrayList) {
             if (!stringIterator.isEmpty()) {
                 locationSelectItems.add(new SelectItem(stringIterator));
             }
         }
 
-        for (String stringIterator : types) {
+        for (String stringIterator : typesArrayList) {
             if (!stringIterator.isEmpty()) {
                 typeSelectItems.add(new SelectItem(stringIterator));
             }
         }
 
-        for (String stringIterator : roles) {
+        for (String stringIterator : rolesArrayList) {
             if (!stringIterator.isEmpty()) {
                 roleSelectItems.add(new SelectItem(stringIterator));
             }
         }
 
-        for (String stringIterator : categories) {
+        for (String stringIterator : categoriesArrayList) {
             if (!stringIterator.isEmpty()) {
                 categorySelectItems.add(new SelectItem(stringIterator));
             }
         }
-    }
+        
+        
 
+    }
 }

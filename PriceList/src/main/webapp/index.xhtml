@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui"  >
     <h:head>
         <title>Ciena Product Training Price List</title>
-
+ 
         <link rel="stylesheet" href="style.css" type="text/css"
               media="screen, projection" />
     </h:head>
@@ -24,14 +24,14 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
             <div id="content">
                 <h:form id="courseListForm">    
- 
+
                     <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>
 
-                    <p:dialog modal="true" widgetVar="statusDialog" 
-                              draggable="false" closable="false" showEffect="">
+                    <p:dialog modal="false" widgetVar="statusDialog" 
+                              draggable="false" closable="false" >
                         <p:graphicImage value="../gfx/ajax-loader.gif" />
                     </p:dialog>
-    
+
                     <p:panelGrid id="categoryTypeDropDownLists"  columns="2">
                         <p:column colspan="2"> 
                             <p>   <h:outputText value="Category: " /></p>
@@ -40,7 +40,7 @@
                                 <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
                             </p:selectOneMenu>
                         </p:column>
-   
+
                         <p:column colspan="2">
                             <p> <h:outputText value="Type: " /></p>
                             <p:selectOneMenu  value="#{courseList.selectedType}">
@@ -51,7 +51,7 @@
 
                     </p:panelGrid>
 
-                    
+
                     <p>Export results: 
                         <h:commandLink>  
                             <p:graphicImage value="gfx/csv.png" />  
@@ -59,7 +59,7 @@
                                             fileName="#{dateBean.getFileName()}" />  
                         </h:commandLink>
                     </p>
-                    
+
                     <p>Select a course in the table below for more information.</p>
 
                     <h3>Search Results</h3>
@@ -68,11 +68,13 @@
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  paginatorAlwaysVisible="false" selection="#{courseList.selectedCourse}" 
                                  selectionMode="single" rowKey="#{course.primaryKey}"
-                                 emptyMessage="No courses found with given criteria" filteredValue="#{courseList.filteredCourses}">
+                                 emptyMessage="No courses found with given criteria" 
+                                 filteredValue="#{courseList.filteredCourses}"
+                                 resizableColumns="true" 
+                                 >
 
                         <p:ajax event="rowSelect" update=":courseListForm:display" 
                                 oncomplete="courseDialog.show()" />
-
 
                         <p:column id="numberColumn" filterBy="#{course.number}"
                                   headerText="Course No" 
@@ -80,17 +82,15 @@
                             <f:facet name="header">Part Number</f:facet>
                             <h:outputText value="#{course.number}" />
                         </p:column>
-
-                        <p:column id="productNumberColumn" filterBy="#{course.product}" 
-
-                                  headerText="Products"
+ 
+                        <p:column id="productColumn"  filterBy="#{course.product}" 
                                   filterMatchMode="contains"
+                                  headerText="Product" 
+                                  filterOptions="#{courseList.productSelectItems}"
                                   >
-                            <f:facet name="header">Products</f:facet>
-
-                            <h:outputText escape="false" value="#{course.product}" />
-
-                        </p:column>                       
+                            <f:facet name="header">Product</f:facet>
+                            <h:outputText value="#{course.product}" />
+                        </p:column>                        
 
                         <p:column id="nameColumn" filterBy="#{course.name}" 
                                   filterMatchMode="contains" 
@@ -119,10 +119,10 @@
                             <h:outputText value="#{course.duration}" />
                         </p:column> 
 
-
                         <p:column id="typeColumn"  
                                   headerText="Type" 
                                   >
+                            <f:facet name="header">Type</f:facet>
 
                             <h:outputText value="#{course.type}" />
                         </p:column>
@@ -133,7 +133,7 @@
                                   headerText="Role" 
                                   filterOptions="#{courseList.roleSelectItems}"
                                   >
-
+                            <f:facet name="header">Role</f:facet>
                             <h:outputText value="#{course.role}" />
                         </p:column>
 
@@ -226,7 +226,7 @@
                         </h:panelGrid>  
                     </p:dialog>  
 
-                    
+
 
                     <h:outputText  
                         value ="#{courseList.response}" /> 
@@ -314,7 +314,7 @@
                             <f:facet name="header">Sub-product</f:facet>
                             <h:outputText value="#{list.subProduct}" />
                         </p:column> 
- 
+
                         <f:facet name="footer">  
                             <p:commandButton id="remove" value="Remove" 
                                              update="shoppingCart" actionListener="#{courseList.removeFromCart()}" />  
@@ -326,7 +326,7 @@
                                 </h:commandLink>
                             </p>
                         </f:facet> 
- 
+
                     </p:dataTable>
 
                 </h:form>
