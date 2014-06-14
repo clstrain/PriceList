@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui"  >
     <h:head>
         <title>Ciena Product Training Price List</title>
- 
+
         <link rel="stylesheet" href="style.css" type="text/css"
               media="screen, projection" />
     </h:head>
@@ -22,6 +22,7 @@
                 <p>Product Training Price List</p>
             </div>
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+            
             <div id="content">
                 <h:form id="courseListForm">    
 
@@ -32,24 +33,6 @@
                         <p:graphicImage value="../gfx/ajax-loader.gif" />
                     </p:dialog>
 
-                    <p:panelGrid id="categoryTypeDropDownLists"  columns="2">
-                        <p:column colspan="2"> 
-                            <p>   <h:outputText value="Category: " /></p>
-                            <p:selectOneMenu  value="#{courseList.selectedCategory}">                                
-                                <f:selectItems value="#{courseList.topcategorySelectItems}"/>
-                                <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
-                            </p:selectOneMenu>
-                        </p:column>
-
-                        <p:column colspan="2">
-                            <p> <h:outputText value="Type: " /></p>
-                            <p:selectOneMenu  value="#{courseList.selectedType}">
-                                <f:selectItems value="#{courseList.toptypeSelectItems}"/>
-                                <p:ajax listener="#{courseList.updateCourseList}" update="@form" />
-                            </p:selectOneMenu>
-                        </p:column>
-
-                    </p:panelGrid>
 
 
                     <p>Export results: 
@@ -73,8 +56,56 @@
                                  resizableColumns="true" 
                                  >
 
-                        <p:ajax event="rowSelect" update=":courseListForm:display" 
-                                oncomplete="courseDialog.show()" />
+                        <p:ajax event="rowSelect" update=":courseListForm:display" oncomplete="PF('courseDialog').show()"/>
+                        
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column colspan="7" filterBy="#{course.category}" headerText="" footerText="" filterMatchMode="exact">
+                                    <f:facet name="filter">
+                                        <p:selectOneButton onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.categorySelectItems}" />
+                                        </p:selectOneButton>
+                                    </f:facet>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column headerText="Part Number" />
+                                <p:column headerText="Product"  filterBy="#{course.product}" filterMatchMode="contains">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.productSelectItems}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>                                <p:column headerText="Description" />
+                                <p:column headerText="Location"  filterBy="#{course.location}">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.locationSelectItems}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>
+                                <p:column headerText="Type"  filterBy="#{course.type}">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.typeSelectItems}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>                                  <p:column headerText="Role"  filterBy="#{course.role}">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.roleSelectItems}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>                               
+                                <p:column headerText="Price" />
+
+                            </p:row>
+                        </p:columnGroup>
 
                         <p:column id="numberColumn" filterBy="#{course.number}"
                                   headerText="Course No" 
@@ -82,7 +113,7 @@
                             <f:facet name="header">Part Number</f:facet>
                             <h:outputText value="#{course.number}" />
                         </p:column>
- 
+
                         <p:column id="productColumn"  filterBy="#{course.product}" 
                                   filterMatchMode="contains"
                                   headerText="Product" 
@@ -100,12 +131,9 @@
                             <h:outputText value="#{course.name}" />
                         </p:column>    
 
-                        <p:column id="locationColumn"  filterBy="#{course.location}" 
-                                  filterMatchMode="exact"
-                                  headerText="Location" 
-                                  filterOptions="#{courseList.locationSelectItems}"
+                        <p:column id="locationColumn" 
+                                  headerText="Location"                                  
                                   >
-
                             <h:outputText value="#{course.location}" />
                         </p:column>                      
 
@@ -128,11 +156,8 @@
                         </p:column>
 
 
-                        <p:column id="roleColumn"  filterBy="#{course.role}" 
-                                  filterMatchMode="exact"
-                                  headerText="Role" 
-                                  filterOptions="#{courseList.roleSelectItems}"
-                                  >
+                        <p:column id="roleColumn" 
+                                  headerText="Role" >
                             <f:facet name="header">Role</f:facet>
                             <h:outputText value="#{course.role}" />
                         </p:column>
@@ -180,7 +205,7 @@
                         </f:facet>
                     </p:dataTable>                    
 
-                    <p:dialog id="dialog" header="Course Detail" widgetVar="courseDialog" resizable="true"  
+                    <p:dialog header="Course Detail" widgetVar="courseDialog" resizable="true"  modal="true"
                               width="500" showEffect="clip" hideEffect="fold">  
 
                         <h:panelGrid id="display" columns="2" cellpadding="4">  
@@ -220,7 +245,7 @@
                             </h:outputText>
 
                             <p></p>
-                            <p:commandButton value="Add to List" actionListener="#{courseList.addToCart()}"   
+                            <p:commandButton value="Add to List" actionListener="#{courseList.addToCart()}" oncomplete="PF('courseDialog').hide()"
                                              update="shoppingCart"  /> 
 
                         </h:panelGrid>  
