@@ -26,14 +26,15 @@
             <div id="content">
                 <h:form id="courseListForm">    
 
-                    <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>
+                    <p:ajaxStatus style="position:fixed;right:25px;bottom:25px">
+                        <f:facet name="start">
+                            <p:graphicImage value="./gfx/ajax-loader.gif" />
+                        </f:facet>
 
-                    <p:dialog modal="false" widgetVar="statusDialog" 
-                              draggable="false" closable="false" >
-                        <p:graphicImage value="../gfx/ajax-loader.gif" />
-                    </p:dialog>
-
-
+                        <f:facet name="complete">
+                            <h:outputText value="" />
+                        </f:facet>
+                    </p:ajaxStatus>
 
                     <p>Export results: 
                         <h:commandLink>  
@@ -46,7 +47,7 @@
                     <p>Select a course in the table below for more information.</p>
 
                     <p:commandButton value="Reset Page" action="index.xhtml" ajax="false"
-                                      /> 
+                                     /> 
 
                     <p:dataTable id="dataTable" value="#{courseList.courses}" var="course" widgetVar="courseTable"
                                  paginator="true" rows="20" rowsPerPageTemplate="10,20,50"
@@ -54,33 +55,54 @@
                                  paginatorAlwaysVisible="false" selection="#{courseList.selectedCourse}" 
                                  selectionMode="single" rowKey="#{course.primaryKey}"
                                  emptyMessage="No courses found with given criteria" 
-                                 filteredValue="#{courseList.filteredCourses}"
-                                 resizableColumns="true" 
-                                 >
+                                 filteredValue="#{courseList.filteredCourses}" >
+
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText style="color:#f56522" value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('courseTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
 
                         <p:ajax event="rowSelect" update=":courseListForm:display" oncomplete="PF('courseDialog').show()"/>
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column colspan="7" filterBy="#{course.category}" headerText="" footerText="" filterMatchMode="exact">
-                                    <f:facet name="filter">
-                                        <p:selectOneButton onchange="PF('courseTable').filter()">
-                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItems value="#{courseList.categorySelectItems}" />
-                                        </p:selectOneButton>
-                                    </f:facet>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column headerText="Part Number" />
-                                <p:column headerText="Product"  filterBy="#{course.product}" filterMatchMode="contains">
+                                <p:column colspan="4" filterBy="#{course.category}" headerText="Category" footerText="" filterMatchMode="exact">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.categorySelectItems}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column colspan="3" headerText="Type"  filterBy="#{course.type}">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('courseTable').filter()">
+                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{courseList.typeSelectItems}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>    
+                            </p:row>
+
+                            <p:row>
+                                <p:column headerText="Part Number" filterBy="#{course.number}"  filterMatchMode="contains" >
+
+                                </p:column>
+
+                                <p:column headerText="Product" filterBy="#{course.product}" filterMatchMode="contains">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu  filter="true" onchange="PF('courseTable').filter()">
                                             <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItems value="#{courseList.productSelectItems}" />
                                         </p:selectOneMenu>
                                     </f:facet>
-                                </p:column>                                <p:column headerText="Description" />
+                                </p:column>                                
+
+                                <p:column headerText="Description" filterBy="#{course.name}" filterMatchMode="contains"/>
+
                                 <p:column headerText="Location"  filterBy="#{course.location}">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('courseTable').filter()">
@@ -88,22 +110,19 @@
                                             <f:selectItems value="#{courseList.locationSelectItems}" />
                                         </p:selectOneMenu>
                                     </f:facet>
-                                </p:column>
-                                <p:column headerText="Type"  filterBy="#{course.type}">
-                                    <f:facet name="filter">
-                                        <p:selectOneMenu onchange="PF('courseTable').filter()">
-                                            <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItems value="#{courseList.typeSelectItems}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
-                                </p:column>                                  <p:column headerText="Role"  filterBy="#{course.role}">
+                                </p:column>     
+
+                                <p:column headerText="Type" />                                    
+
+                                <p:column headerText="Role"  filterBy="#{course.role}">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('courseTable').filter()">
                                             <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItems value="#{courseList.roleSelectItems}" />
                                         </p:selectOneMenu>
                                     </f:facet>
-                                </p:column>                               
+                                </p:column>      
+
                                 <p:column headerText="Price" />
 
                             </p:row>
@@ -126,12 +145,14 @@
                         </p:column>                        
 
                         <p:column id="nameColumn" filterBy="#{course.name}" 
-                                  filterMatchMode="contains" 
-                                  style="white-space:normal !important;"
-                                  >
+                                  filterMatchMode="contains"  headerText="Description" 
+                                  style="white-space:normal !important;">
+
                             <f:facet name="header">Description</f:facet>
+
                             <h:outputText value="#{course.name}" />
-                        </p:column>    
+
+                        </p:column>
 
                         <p:column id="locationColumn" 
                                   headerText="Location"                                  
@@ -196,15 +217,8 @@
                             <h:outputText value="#{course.subProduct}" />
                         </p:column> 
 
-                        <f:facet name="footer">
-                            <p:outputPanel>
-                                <h:outputText value ="Search all fields:" 
-                                              style="color:#f56522;" />
-                                <p:inputText id="globalFilter" 
-                                             onkeyup="courseTable.filter();" 
-                                             style="width:150px" />
-                            </p:outputPanel>
-                        </f:facet>
+
+
                     </p:dataTable>                    
 
                     <p:dialog header="Course Detail" widgetVar="courseDialog" resizable="true"  modal="true"
