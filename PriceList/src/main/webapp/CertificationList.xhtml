@@ -46,7 +46,7 @@
 
                     <p>Select a course in the table below for more information.</p>
 
-                    <p:commandButton value="Reset Page" action="index.xhtml" ajax="false"
+                    <p:commandButton value="Reset Page" action="CertificationList.xhtml" ajax="false"
                                      /> 
 
                     <p:dataTable id="dataTable" value="#{certList.courses}" var="course" widgetVar="courseTable"
@@ -92,7 +92,7 @@
 
                                 </p:column>
 
-                                <p:column headerText="Product" filterBy="#{course.program}" filterMatchMode="contains">
+                                <p:column headerText="Program" filterBy="#{course.program}" filterMatchMode="contains">
                                     <f:facet name="filter">
                                         <p:selectOneMenu  filter="true" onchange="PF('courseTable').filter()">
                                             <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
@@ -114,7 +114,7 @@
 
                                 <p:column headerText="Type" />                                    
 
-                                <p:column headerText="Role"  filterBy="#{course.level}">
+                                <p:column headerText="Level"  filterBy="#{course.level}">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('courseTable').filter()">
                                             <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
@@ -137,10 +137,10 @@
 
                         <p:column id="programColumn"  filterBy="#{course.program}" 
                                   filterMatchMode="contains"
-                                  headerText="Product" 
+                                  headerText="Program" 
                                   filterOptions="#{certList.programSelectItems}"
                                   >
-                            <f:facet name="header">Product</f:facet>
+                            <f:facet name="header">Program</f:facet>
                             <h:outputText value="#{course.program}" />
                         </p:column>                        
 
@@ -180,8 +180,8 @@
 
 
                         <p:column id="levelColumn" 
-                                  headerText="Role" >
-                            <f:facet name="header">Role</f:facet>
+                                  headerText="Level" >
+                            <f:facet name="header">Level</f:facet>
                             <h:outputText value="#{course.level}" />
                         </p:column>
 
@@ -207,15 +207,7 @@
                             </h:outputText>
                         </p:column>
 
-                        <p:column style="display:none;">
-                            <f:facet name="header">Product Category</f:facet>
-                            <h:outputText value="#{course.superProduct}" />
-                        </p:column> 
-
-                        <p:column style="display:none;">
-                            <f:facet name="header">Sub-program</f:facet>
-                            <h:outputText value="#{course.subProduct}" />
-                        </p:column> 
+                       
 
 
 
@@ -226,18 +218,15 @@
 
                         <h:panelGrid id="display" columns="2" cellpadding="4">  
 
-                            <f:facet name="header">                              
-
-                                <h:outputText value="#{certList.selectedCourse.getSuperProduct()}" />
-                                <br />
+                            <f:facet name="header">
                                 <h:outputText value="#{certList.selectedCourse.number}" />
                             </f:facet>
 
-                            <h:outputText value="Category " />  
+                            <h:outputText value="Category: " />  
                             <h:outputText value="#{certList.selectedCourse.category}" /> 
 
-                            <h:outputText value="Products: " />  
-                            <h:outputText value="#{certList.selectedCourse.program} #{certList.selectedCourse.getSubProduct()}" /> 
+                            <h:outputText value="Program: " />  
+                            <h:outputText value="#{certList.selectedCourse.program}" /> 
 
 
                             <h:outputText value="Description: " />  
@@ -246,7 +235,7 @@
                             <h:outputText value="Unit: " />  
                             <h:outputText value="#{certList.selectedCourse.unit}" /> 
 
-                            <h:outputText value="Role: " />  
+                            <h:outputText value="Level: " />  
                             <h:outputText value="#{certList.selectedCourse.level}" />
 
                             <h:outputText value="Duration: " />  
@@ -286,10 +275,10 @@
 
                         <p:column id="listProductNumberColumn" style="display:none;" 
 
-                                  headerText="Products"
+                                  headerText="Program"
                                   filterMatchMode="contains"
                                   >
-                            <f:facet name="header">Products</f:facet>
+                            <f:facet name="header">Program</f:facet>
 
                             <h:outputText escape="false" value="#{list.program}" />
 
@@ -323,7 +312,7 @@
                         </p:column>
 
                         <p:column style="display:none;">
-                            <f:facet name="header">Role</f:facet>
+                            <f:facet name="header">Level</f:facet>
                             <h:outputText value="#{list.level}" />
                         </p:column> 
 
@@ -344,18 +333,8 @@
                                                  currencyCode="USD" 
                                                  currencySymbol="$"/>
                             </h:outputText>
-                        </p:column>
-
-                        <p:column style="display:none;">
-                            <f:facet name="header">Product Category</f:facet>
-                            <h:outputText value="#{list.superProduct}" />
                         </p:column> 
-
-                        <p:column style="display:none;">
-                            <f:facet name="header">Sub-program</f:facet>
-                            <h:outputText value="#{list.subProduct}" />
-                        </p:column> 
-
+                       
                         <f:facet name="footer">  
                             <p:commandButton id="remove" value="Remove" 
                                              update="shoppingCart" actionListener="#{certList.removeFromCart()}" />  

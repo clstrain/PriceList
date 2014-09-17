@@ -17,24 +17,24 @@ public class CourseDAO implements Serializable {
     private Connection conn = null;
     private Statement stmt = null;
     private CallableStatement cstmt = null;
-/*
+
     private final String userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
     private final String password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     private final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
     private final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
     private final String dbName = "plcls";
- 
-        */
+
+    /*
      private final String userName = "adminZfLaJBu";
      private final String password = "2y8aFmfFilmV";
      private final String host = "localhost";
-     private final String port = "3306";
+     private final String port = "3307";
      private final String dbName = "plcls";
-   
+     */
     private final String url = "jdbc:mysql://" + host + ":" + port + "/"
             + dbName;
 
-     public CourseDAO() {
+    public CourseDAO() {
     }
 
     public List<CourseListing> getAll() {
@@ -58,7 +58,6 @@ public class CourseDAO implements Serializable {
                     + "on CourseProduct.P_ID=Product.P_ID "
                     + "group by Course.number");
 
-           
             rset = pstmt.executeQuery();
 
             while (rset.next()) {
@@ -128,9 +127,8 @@ public class CourseDAO implements Serializable {
 
     List<CourseListing> getByCategoryAndType(String selectedCategory, String selectedType) {
 
-     List<CourseListing> courseListing = new ArrayList<CourseListing>();
+        List<CourseListing> courseListing = new ArrayList<CourseListing>();
 
-    
         try {
             //Connect to database
 
@@ -152,7 +150,7 @@ public class CourseDAO implements Serializable {
 
             pstmt.setString(1, selectedCategory);
             pstmt.setString(2, selectedType);
-                       
+
             rset = pstmt.executeQuery();
 
             while (rset.next()) {
@@ -194,7 +192,6 @@ public class CourseDAO implements Serializable {
                         tempProduct));
             }
 
-            
         } catch (SQLException e) {
             response = "SQLException: " + e.getMessage();
             while ((e = e.getNextException()) != null) {
@@ -215,8 +212,8 @@ public class CourseDAO implements Serializable {
                 }
             }
         }
-        
-        this.response="Done";
+
+        this.response = "Done";
         return courseListing;
     }
 
@@ -224,7 +221,6 @@ public class CourseDAO implements Serializable {
 
         List<CourseListing> courseListing = new ArrayList<CourseListing>();
 
-    
         try {
             //Connect to database
 
@@ -244,7 +240,7 @@ public class CourseDAO implements Serializable {
                     + "group by Course.number");
 
             pstmt.setString(1, selectedType);
-                       
+
             rset = pstmt.executeQuery();
 
             while (rset.next()) {
@@ -286,7 +282,6 @@ public class CourseDAO implements Serializable {
                         tempProduct));
             }
 
-            
         } catch (SQLException e) {
             response = "SQLException: " + e.getMessage();
             while ((e = e.getNextException()) != null) {
@@ -307,17 +302,15 @@ public class CourseDAO implements Serializable {
                 }
             }
         }
-        
-        this.response="Done";
+
+        this.response = "Done";
         return courseListing;
     }
 
-       
     List<CourseListing> getByCategory(String selectedCategory) {
 
         List<CourseListing> courseListing = new ArrayList<CourseListing>();
 
-    
         try {
             //Connect to database
 
@@ -337,7 +330,7 @@ public class CourseDAO implements Serializable {
                     + "group by Course.number");
 
             pstmt.setString(1, selectedCategory);
-                       
+
             rset = pstmt.executeQuery();
 
             while (rset.next()) {
@@ -379,7 +372,6 @@ public class CourseDAO implements Serializable {
                         tempProduct));
             }
 
-            
         } catch (SQLException e) {
             response = "SQLException: " + e.getMessage();
             while ((e = e.getNextException()) != null) {
@@ -400,12 +392,11 @@ public class CourseDAO implements Serializable {
                 }
             }
         }
-        
-        this.response="Done";
+
+        this.response = "Done";
         return courseListing;
     }
 
-    
     public List<String> getmenuItemsProduct() {
 
         List<String> menuItemsProduct = new ArrayList<String>() {
@@ -431,7 +422,6 @@ public class CourseDAO implements Serializable {
                     while (rset.next()) {
                         add(rset.getString("product"));
                     }
-
 
                 } catch (SQLException e) {
                     response = "SQLException: " + e.getMessage();
@@ -459,5 +449,4 @@ public class CourseDAO implements Serializable {
         return menuItemsProduct;
     }
 
-    
 }

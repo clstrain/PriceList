@@ -2,21 +2,21 @@ package PriceList;
 
 import java.io.Serializable;
 
-public class CertListing implements Serializable{
+public class CertListing implements Serializable {
 
     private double price;
     private String number, name, location, unit, duration,
             type, level, category, maxNumStudents;
-   
+
     private String program, primaryKey;
 
     public CertListing() {
-        
+
     }
 
-    public CertListing(double price, String number, String name, 
-            String location, String unit, String duration, String type, 
-            String level, String category, String maxNumStudents, 
+    public CertListing(double price, String number, String name,
+            String location, String unit, String duration, String type,
+            String level, String category, String maxNumStudents,
             String program) {
         this.price = price;
         this.number = number;
@@ -27,7 +27,7 @@ public class CertListing implements Serializable{
         this.type = type;
         this.level = level;
         this.category = category;
-        this.maxNumStudents = maxNumStudents;       
+        this.maxNumStudents = maxNumStudents;
         this.program = program;
         this.primaryKey = this.number;
     }
@@ -128,7 +128,4 @@ public class CertListing implements Serializable{
         this.primaryKey = primaryKey;
     }
 
-    
-    
-    
 }

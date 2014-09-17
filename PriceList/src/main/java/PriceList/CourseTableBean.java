@@ -21,7 +21,7 @@ public class CourseTableBean extends ListDataModel<CourseListing>
 
     private List<CourseListing> courses, filteredCourses, shoppingCartList;
     public static Integer CP_ID;
-    
+
     private String response;
     public CourseListing selectedCourse, selectedShoppingcartCourse;
 
@@ -30,7 +30,7 @@ public class CourseTableBean extends ListDataModel<CourseListing>
             roleSelectItems = new ArrayList<SelectItem>(),
             categorySelectItems = new ArrayList<SelectItem>(),
             productSelectItems = new ArrayList<SelectItem>();
-    
+
     CourseDAO courseDAO = new CourseDAO();
 
     @PostConstruct
@@ -54,11 +54,10 @@ public class CourseTableBean extends ListDataModel<CourseListing>
         courses = courseDAO.getAll();
 
         response = courseDAO.response;
-               
-                
+
         LoadDataTableMenus();
     }
-      
+
     public void addToCart() {
         shoppingCartList.add(selectedCourse);
 
@@ -117,7 +116,6 @@ public class CourseTableBean extends ListDataModel<CourseListing>
     public void setFilteredCourses(List<CourseListing> filteredCourses) {
         this.filteredCourses = filteredCourses;
     }
-
 
     public List<SelectItem> getLocationSelectItems() {
         return locationSelectItems;
@@ -182,44 +180,43 @@ public class CourseTableBean extends ListDataModel<CourseListing>
     public void setProductSelectItems(List<SelectItem> productSelectItems) {
         this.productSelectItems = productSelectItems;
     }
-    
+
     private void LoadDataTableMenus() {
 
-        
         productSelectItems = new ArrayList<SelectItem>();
-       
-        List<String>products = new ArrayList<String>(courseDAO.getmenuItemsProduct());
-                     
+
+        List<String> products = new ArrayList<String>(courseDAO.getmenuItemsProduct());
+
         for (String stringIterator : products) {
             if (!stringIterator.isEmpty()) {
                 productSelectItems.add(new SelectItem(stringIterator));
             }
         }
-        
+
         //load the dropdown lists into HashSets in order to remove dupes 
         Set<String> locations = new HashSet<String>();
         Set<String> categories = new HashSet<String>();
         Set<String> types = new HashSet<String>();
         Set<String> roles = new HashSet<String>();
-        
+
         for (CourseListing courseListing : courses) {
             locations.add(courseListing.getLocation());
             categories.add(courseListing.getCategory());
             types.add(courseListing.getType());
             roles.add(courseListing.getRole());
         }
-        
+
         //now load the dropdown lists into array lists in order to sort them abc
         List<String> locationsArrayList = new ArrayList<String>(locations);
         List<String> categoriesArrayList = new ArrayList<String>(categories);
         List<String> typesArrayList = new ArrayList<String>(types);
         List<String> rolesArrayList = new ArrayList<String>(roles);
-                       
+
         Collections.sort(locationsArrayList);
         Collections.sort(categoriesArrayList);
         Collections.sort(typesArrayList);
         Collections.sort(rolesArrayList);
-             
+
         //setup selectItems
         locationSelectItems = new ArrayList<SelectItem>();
         typeSelectItems = new ArrayList<SelectItem>();
@@ -250,8 +247,6 @@ public class CourseTableBean extends ListDataModel<CourseListing>
                 categorySelectItems.add(new SelectItem(stringIterator));
             }
         }
-        
-        
 
     }
 }

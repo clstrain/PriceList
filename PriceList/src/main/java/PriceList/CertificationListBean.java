@@ -21,9 +21,9 @@ public class CertificationListBean extends ListDataModel<CertListing>
 
     private List<CertListing> courses, filteredCourses, shoppingCartList;
     public static Integer CP_ID;
-    
+
     private String response;
-    
+
     public CertListing selectedCourse, selectedShoppingcartCourse;
 
     private List<SelectItem> locationSelectItems = new ArrayList<SelectItem>(),
@@ -31,7 +31,7 @@ public class CertificationListBean extends ListDataModel<CertListing>
             levelSelectItems = new ArrayList<SelectItem>(),
             categorySelectItems = new ArrayList<SelectItem>(),
             programSelectItems = new ArrayList<SelectItem>();
-    
+
     CertDAO certDAO = new CertDAO();
 
     @PostConstruct
@@ -55,8 +55,26 @@ public class CertificationListBean extends ListDataModel<CertListing>
         courses = certDAO.getAll();
 
         response = certDAO.response;
-                               
+
         LoadDataTableMenus();
+    }
+
+    
+    public void addToCart() {
+        shoppingCartList.add(selectedCourse);
+
+        Set tempSet = new HashSet(shoppingCartList);
+
+        shoppingCartList = new ArrayList(tempSet);
+    }
+
+    public void removeFromCart() {
+
+        if (selectedShoppingcartCourse == null) {
+            response = "Select Something to Remove First";
+        } else {
+            shoppingCartList.remove(selectedShoppingcartCourse);
+        }
     }
     
     public String getResponse() {
@@ -100,7 +118,6 @@ public class CertificationListBean extends ListDataModel<CertListing>
     public void setFilteredCourses(List<CertListing> filteredCourses) {
         this.filteredCourses = filteredCourses;
     }
-
 
     public List<SelectItem> getLocationSelectItems() {
         return locationSelectItems;
@@ -165,50 +182,49 @@ public class CertificationListBean extends ListDataModel<CertListing>
     public void setProgramSelectItems(List<SelectItem> programSelectItems) {
         this.programSelectItems = programSelectItems;
     }
-    
+
     private void LoadDataTableMenus() {
 
-        
         programSelectItems = new ArrayList<SelectItem>();
-       
-        List<String>programs = new ArrayList<String>();
-        
+
+        List<String> programs = new ArrayList<String>();
+
         for (CertListing stringIterator : courses) {
-            
-                programSelectItems.add(new SelectItem(stringIterator.getProgram()));
-            
+
+            programSelectItems.add(new SelectItem(stringIterator.getProgram()));
+
         }
-                     
+
         for (String stringIterator : programs) {
             if (!stringIterator.isEmpty()) {
                 programSelectItems.add(new SelectItem(stringIterator));
             }
         }
-        
+
         //load the dropdown lists into HashSets in order to remove dupes 
         Set<String> locations = new HashSet<String>();
         Set<String> categories = new HashSet<String>();
         Set<String> types = new HashSet<String>();
         Set<String> levels = new HashSet<String>();
-        
+
         for (CertListing courseListing : courses) {
             locations.add(courseListing.getLocation());
             categories.add(courseListing.getCategory());
             types.add(courseListing.getType());
             levels.add(courseListing.getLevel());
         }
-        
+
         //now load the dropdown lists into array lists in order to sort them abc
         List<String> locationsArrayList = new ArrayList<String>(locations);
         List<String> categoriesArrayList = new ArrayList<String>(categories);
         List<String> typesArrayList = new ArrayList<String>(types);
         List<String> levelsArrayList = new ArrayList<String>(levels);
-                       
+
         Collections.sort(locationsArrayList);
         Collections.sort(categoriesArrayList);
         Collections.sort(typesArrayList);
         Collections.sort(levelsArrayList);
-             
+
         //setup selectItems
         locationSelectItems = new ArrayList<SelectItem>();
         typeSelectItems = new ArrayList<SelectItem>();
@@ -239,8 +255,6 @@ public class CertificationListBean extends ListDataModel<CertListing>
                 categorySelectItems.add(new SelectItem(stringIterator));
             }
         }
-        
-        
 
     }
 }

@@ -10,17 +10,17 @@ import java.io.Serializable;
  *
  * @author aperea
  */
-public class Customer implements Serializable{
-    
-    private String firstName, lastName, email, 
-            companyName, companyAddress, companyAddress2, 
+public class Customer implements Serializable {
+
+    private String firstName, lastName, email,
+            companyName, companyAddress, companyAddress2,
             country, phone, cienaRelation;
-        
-    public Customer(){        
+
+    public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String email, 
-            String companyName, String companyAddress, String companyAddress2, 
+    public Customer(String firstName, String lastName, String email,
+            String companyName, String companyAddress, String companyAddress2,
             String country, String phone, String cienaRelation) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,7 +31,7 @@ public class Customer implements Serializable{
         this.country = country;
         this.phone = phone;
         this.cienaRelation = cienaRelation;
-    }       
+    }
 
     public String getFirstName() {
         return firstName;
@@ -103,5 +103,5 @@ public class Customer implements Serializable{
 
     public void setCienaRelation(String cienaRelation) {
         this.cienaRelation = cienaRelation;
-    }    
+    }
 }

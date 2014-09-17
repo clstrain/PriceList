@@ -15,25 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.model.SelectItem;
 
-
 public class MenuDAO implements Serializable {
-  /*
-    private final String userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-    private final String password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-    private final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-    private final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-    private final String dbName = "plcls";
-         */
-  
-   private final String userName = "adminZfLaJBu";
-     private final String password = "2y8aFmfFilmV";
-     private final String host = "localhost";
-     private final String port = "3306";
+    /*
+     private final String userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+     private final String password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+     private final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+     private final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
      private final String dbName = "plcls";
+     */
+
+    private final String userName = "adminZfLaJBu";
+    private final String password = "2y8aFmfFilmV";
+    private final String host = "localhost";
+    private final String port = "3306";
+    private final String dbName = "plcls";
 
     private final String url = "jdbc:mysql://" + host + ":" + port + "/"
             + dbName;
-
 
     private static final long serialVersionUID = -5061581851476260511L;
     private Connection conn = null;
@@ -68,7 +66,6 @@ public class MenuDAO implements Serializable {
                     while (rset.next()) {
                         add(rset.getString("superProduct"));
                     }
-
 
                 } catch (SQLException e) {
                     response = "SQLException: " + e.getMessage();
@@ -122,7 +119,6 @@ public class MenuDAO implements Serializable {
                         add(rset.getString("product"));
                     }
 
-
                 } catch (SQLException e) {
                     response = "SQLException: " + e.getMessage();
                     while ((e = e.getNextException()) != null) {
@@ -151,7 +147,6 @@ public class MenuDAO implements Serializable {
 
     public List<String> getmenuItemsCourseType() {
 
-
         List<String> menuItemsCourseType = new ArrayList<String>() {
             private static final long serialVersionUID = 3109256773218160485L;
 
@@ -174,7 +169,6 @@ public class MenuDAO implements Serializable {
                     while (rset.next()) {
                         add(rset.getString("type"));
                     }
-
 
                 } catch (SQLException e) {
                     response = "SQLException: " + e.getMessage();
@@ -203,7 +197,6 @@ public class MenuDAO implements Serializable {
 
     public List<String> getmenuItemsCategory() {
 
-
         List<String> menuItemsCategory = new ArrayList<String>() {
             private static final long serialVersionUID = 3109256773218160485L;
 
@@ -221,14 +214,11 @@ public class MenuDAO implements Serializable {
 
                     pstmt = conn.prepareStatement("select distinct category from Course order by category asc");
 
-
-
                     rset = pstmt.executeQuery();
 
                     while (rset.next()) {
                         add(rset.getString("category"));
                     }
-
 
                 } catch (SQLException e) {
                     response = "SQLException: " + e.getMessage();
@@ -257,7 +247,6 @@ public class MenuDAO implements Serializable {
 
     public List<SelectItem> getmenuItemsLocation() {
 
-
         List<SelectItem> menuItemsLocation = new ArrayList<SelectItem>() {
             private static final long serialVersionUID = 3109256773218160485L;
 
@@ -280,7 +269,6 @@ public class MenuDAO implements Serializable {
                     while (rset.next()) {
                         add(new SelectItem(rset.getString("location")));
                     }
-
 
                 } catch (SQLException e) {
                     response = "SQLException: " + e.getMessage();

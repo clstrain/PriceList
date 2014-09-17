@@ -2,7 +2,7 @@ package PriceList;
 
 import java.io.Serializable;
 
-public class CourseListing implements Serializable{
+public class CourseListing implements Serializable {
 
     private double price;
     private String number, name, location, unit, duration,
@@ -12,12 +12,12 @@ public class CourseListing implements Serializable{
     private String product, primaryKey;
 
     public CourseListing() {
-        
+
     }
 
-    public CourseListing(double price, String number, String name, 
-            String location, String unit, String duration, String type, 
-            String role, String category, String maxNumStudents, 
+    public CourseListing(double price, String number, String name,
+            String location, String unit, String duration, String type,
+            String role, String category, String maxNumStudents,
             String superProduct, String subProduct, String product) {
         this.price = price;
         this.number = number;
@@ -138,8 +138,6 @@ public class CourseListing implements Serializable{
     public void setSubProduct(String subProduct) {
         this.subProduct = subProduct;
     }
-    
-    
 
     public Integer getP_ID() {
         return P_ID;

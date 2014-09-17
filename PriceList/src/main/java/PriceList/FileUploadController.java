@@ -1,6 +1,4 @@
-
 package PriceList;
-
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -22,11 +20,11 @@ public class FileUploadController {
 
     public void upload() {
         FacesMessage msg = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-                FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
+        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 }

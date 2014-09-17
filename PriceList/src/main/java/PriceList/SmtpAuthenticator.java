@@ -7,19 +7,19 @@ package PriceList;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
-
 class SmtpAuthenticator extends Authenticator {
-     String user;
-     String pw;
-     public SmtpAuthenticator (String username, String password)
-     {
+
+    String user;
+    String pw;
+
+    public SmtpAuthenticator(String username, String password) {
         super();
         this.user = username;
         this.pw = password;
-     }
-     @Override
-    public PasswordAuthentication getPasswordAuthentication()
-    {
-       return new PasswordAuthentication(user, pw);
+    }
+
+    @Override
+    public PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(user, pw);
     }
 }
